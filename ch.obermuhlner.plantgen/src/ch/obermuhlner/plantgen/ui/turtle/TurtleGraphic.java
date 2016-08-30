@@ -35,7 +35,6 @@ public class TurtleGraphic {
 	public void execute(GraphicsContext gc, String script) {
 		for (int i = 0; i < script.length(); i++) {
 			char c = script.charAt(i);
-			System.out.println("Command: " + c);
 			TurtleCommand command = commands.get(c);
 			if (command == null) {
 				command = defaultCommand;
@@ -48,7 +47,6 @@ public class TurtleGraphic {
 	}
 	
 	private void execute(GraphicsContext gc, TurtleCommand command) {
-		System.out.println(states.element());
 		command.execute(gc, states);
 	}
 
