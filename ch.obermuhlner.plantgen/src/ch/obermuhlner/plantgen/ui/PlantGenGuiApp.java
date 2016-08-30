@@ -1,5 +1,7 @@
 package ch.obermuhlner.plantgen.ui;
 
+import java.util.Random;
+
 import ch.obermuhlner.plantgen.Plant;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
@@ -8,7 +10,8 @@ import ch.obermuhlner.plantgen.ui.turtle.command.CompositeCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.ForwardCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.PopCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.PushCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.TurnCommand;
+import ch.obermuhlner.plantgen.ui.turtle.command.RandomForwardCommand;
+import ch.obermuhlner.plantgen.ui.turtle.command.RandomTurnCommand;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -30,15 +33,18 @@ public class PlantGenGuiApp extends Application {
 		
 		double turnAngle = 22.5 / 360 * 2 * Math.PI;
 		double step = 20;
+		double standardDeviation = 0.4;
+		
+		Random random = new Random();
 		
 		turtleGraphic.addCommand('[', new PushCommand());
 		turtleGraphic.addCommand(']', new PopCommand());
-		turtleGraphic.addCommand('-', new TurnCommand(-turnAngle));
-		turtleGraphic.addCommand('+', new TurnCommand(turnAngle));
-		turtleGraphic.addCommand('T', new CompositeCommand(new ColorCommand(Color.BLACK), new ForwardCommand(step)));
-		turtleGraphic.addCommand('B', new CompositeCommand(new ColorCommand(Color.BROWN), new ForwardCommand(step)));
+		turtleGraphic.addCommand('-', new RandomTurnCommand(random, -turnAngle, standardDeviation));
+		turtleGraphic.addCommand('+', new RandomTurnCommand(random, turnAngle, standardDeviation));
+		turtleGraphic.addCommand('T', new CompositeCommand(new ColorCommand(Color.BLACK), new RandomForwardCommand(random, step, standardDeviation)));
+		turtleGraphic.addCommand('B', new CompositeCommand(new ColorCommand(Color.BROWN), new RandomForwardCommand(random, step, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(new ColorCommand(Color.GREEN), new ForwardCommand(step)));
-		turtleGraphic.setDefaultCommand(new CompositeCommand(new ColorCommand(Color.BLACK), new ForwardCommand(step)));
+		turtleGraphic.setDefaultCommand(new CompositeCommand(new ColorCommand(Color.BLACK), new ForwardCommand(step / 2)));
 	}
 	
 	@Override
