@@ -27,8 +27,8 @@ public class Plant {
 	 */
 	private static final String[] S_RULES = {
 			"P",
-			"T[P][rTuT[P]][lTuT[P]]",
-			"TTTP",
+			"[P][rTuT[P]][lTuT[P]]",
+			"TTTTTP",
 		};
 
 	/**
@@ -39,11 +39,11 @@ public class Plant {
 		"TT[-P][P[L]][+P]",
 		"[-P][+P][-TP][+TP]",
 		"TT[P][-TPL][+TPL]",
-		"PT[-PT[-L]][+PT[+L]]", // cool
+		"PT[-Pt[-L]][+Pt[+L]]", // cool tree
 		"[P]~PT[-L]~PT[+L]", // vines
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
-		"T[--PT[-L][+L]T+T[-L][+L]][++PP[-L][+L]T-T[-L][+L]]", // dense tree
+		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
 //		"<BP>",
 //		"T[-B]T[+B]P" // not working yet
 	};
@@ -88,7 +88,10 @@ public class Plant {
 		double turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
 		double step = random.nextDouble() * 20 + 10;
 		double standardDeviation = random.nextDouble() * 0.4 + 0.1;
-		double leafFactor = random.nextDouble() * 3.0 + 1.0;
+		double leafFactor = random.nextDouble() * 2.0 + 2.0;
+		double initialThickness = random.nextDouble() * 10 + 10;
+		
+		turtleGraphic.getState().thickness = initialThickness;
 				
 		turtleGraphic.addCommand('[', new PushCommand());
 		turtleGraphic.addCommand(']', new PopCommand());
@@ -109,7 +112,7 @@ public class Plant {
 				new RandomForwardCommand(random, step, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
 				new ColorCommand(Color.GREEN), 
-				new LeafCommand(leafFactor)));
+				new LeafCommand(random.nextBoolean(), leafFactor)));
 	}
 	
 	public String getDescription() {

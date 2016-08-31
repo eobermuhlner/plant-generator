@@ -9,8 +9,10 @@ import javafx.scene.canvas.GraphicsContext;
 public class LeafCommand implements TurtleCommand {
 
 	private double leafFactor;
+	private boolean useThickness;
 
-	public LeafCommand(double leafFactor) {
+	public LeafCommand(boolean useThickness, double leafFactor) {
+		this.useThickness = useThickness;
 		this.leafFactor = leafFactor;
 	}
 	
@@ -18,7 +20,10 @@ public class LeafCommand implements TurtleCommand {
 	public void execute(GraphicsContext gc, Deque<TurtleState> turtleStates) {
 		TurtleState state = turtleStates.peek();
 
-		double radius = state.thickness * leafFactor;
+		double radius = leafFactor;
+		if (useThickness) {
+			radius *= state.thickness;
+		}
 		
 		double top = state.x - radius;
 		double left = state.y - radius;

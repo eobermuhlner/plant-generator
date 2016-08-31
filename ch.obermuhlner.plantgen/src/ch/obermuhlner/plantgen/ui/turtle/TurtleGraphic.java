@@ -49,5 +49,9 @@ public class TurtleGraphic {
 	private void execute(GraphicsContext gc, TurtleCommand command) {
 		command.execute(gc, states);
 	}
+	
+	public TurtleState getState() {
+		return states.peek();
+	}
 
 }

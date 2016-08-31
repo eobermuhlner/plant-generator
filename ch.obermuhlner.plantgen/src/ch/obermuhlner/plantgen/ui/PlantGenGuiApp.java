@@ -39,7 +39,7 @@ public class PlantGenGuiApp extends Application {
 		initialState.x = 400;
 		initialState.y = 590;
 		initialState.angle = -Math.PI / 2.0;
-		initialState.thickness = 10.0;
+		initialState.thickness = 1.0;
 		turtleGraphic = new TurtleGraphic(initialState);
 
 		Random random = new Random();
