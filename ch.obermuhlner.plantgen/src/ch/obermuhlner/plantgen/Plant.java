@@ -37,23 +37,24 @@ public class Plant {
 	private static final String[] P_RULES = {
 		"T[-PL][PL][+PL]",
 		"TT[-P][P[L]][+P]",
-		"[-P][+P][-TP][+TP]",
+		"[-P][+P][-TP][+TP]L",
 		"TT[P][-TPL][+TPL]",
 		"PT[-Pt[-L]][+Pt[+L]]", // cool tree
 		"[P]~PT[-L]~PT[+L]", // vines
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
 		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
-//		"<BP>",
-//		"T[-B]T[+B]P" // not working yet
+		"TT[-BL][+BL]TT[-BL][+BL]P", // christmas tree
+		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
+		"[-TTTPL][TTTPL][+TTTPL]",
 	};
 
 	/**
 	 * Branch rules
 	 */
 	private static final String[] B_RULES = {
-//		"TB[dL]",
-		"T"
+//		"tB[dL]",
+		"t"
 	};
 	
 	/**
@@ -87,9 +88,10 @@ public class Plant {
 	public void initialize(TurtleGraphic turtleGraphic) {
 		double turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
 		double step = random.nextDouble() * 20 + 10;
-		double standardDeviation = random.nextDouble() * 0.4 + 0.1;
-		double leafFactor = random.nextDouble() * 2.0 + 2.0;
+		double standardDeviation = random.nextDouble() * 0.0 + 0.1;
 		double initialThickness = random.nextDouble() * 10 + 10;
+		double leafFactor = random.nextDouble() * 2.0;
+		double leafThicknessFactor = random.nextDouble() * 2.0;
 		
 		turtleGraphic.getState().thickness = initialThickness;
 				
@@ -112,7 +114,7 @@ public class Plant {
 				new RandomForwardCommand(random, step, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
 				new ColorCommand(Color.GREEN), 
-				new LeafCommand(random.nextBoolean(), leafFactor)));
+				new LeafCommand(leafFactor, leafThicknessFactor)));
 	}
 	
 	public String getDescription() {
