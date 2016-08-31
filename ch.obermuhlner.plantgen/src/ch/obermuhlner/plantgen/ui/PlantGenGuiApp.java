@@ -5,13 +5,6 @@ import java.util.Random;
 import ch.obermuhlner.plantgen.Plant;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
-import ch.obermuhlner.plantgen.ui.turtle.command.ColorCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.CompositeCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.ForwardCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.PopCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.PushCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.RandomForwardCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.RandomTurnCommand;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -24,47 +17,38 @@ public class PlantGenGuiApp extends Application {
 
 	private TurtleGraphic turtleGraphic;
 
-	public PlantGenGuiApp() {
-		TurtleState initialState = new TurtleState();
-		initialState.x = 400;
-		initialState.y = 590;
-		initialState.angle = -Math.PI / 2.0;
-		turtleGraphic = new TurtleGraphic(initialState);
-		
-		double turnAngle = 22.5 / 360 * 2 * Math.PI;
-		double step = 20;
-		double standardDeviation = 0.4;
-		
-		Random random = new Random();
-		
-		turtleGraphic.addCommand('[', new PushCommand());
-		turtleGraphic.addCommand(']', new PopCommand());
-		turtleGraphic.addCommand('-', new RandomTurnCommand(random, -turnAngle, standardDeviation));
-		turtleGraphic.addCommand('+', new RandomTurnCommand(random, turnAngle, standardDeviation));
-		turtleGraphic.addCommand('T', new CompositeCommand(new ColorCommand(Color.BLACK), new RandomForwardCommand(random, step, standardDeviation)));
-		turtleGraphic.addCommand('B', new CompositeCommand(new ColorCommand(Color.BROWN), new RandomForwardCommand(random, step, standardDeviation)));
-		turtleGraphic.addCommand('L', new CompositeCommand(new ColorCommand(Color.GREEN), new ForwardCommand(step)));
-		turtleGraphic.setDefaultCommand(new CompositeCommand(new ColorCommand(Color.BLACK), new ForwardCommand(step / 2)));
-	}
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Drawing Operations Test");
+		primaryStage.setTitle("Random Plant Browser");
         Group root = new Group();
         Canvas canvas = new Canvas(800, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        canvas.setOnMouseClicked(mouseEvent -> drawPlant(gc));
         drawPlant(gc);
+
         root.getChildren().add(canvas);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 	}
 
 	private void drawPlant(GraphicsContext gc) {
-		Plant plant = new Plant();
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+		
+		TurtleState initialState = new TurtleState();
+		initialState.x = 400;
+		initialState.y = 590;
+		initialState.angle = -Math.PI / 2.0;
+		turtleGraphic = new TurtleGraphic(initialState);
+
+		Random random = new Random();
+		
+		Plant plant = new Plant(random);
 		String description = plant.getDescription();
 		
 		gc.setStroke(Color.RED);
 		gc.setLineWidth(4);
+		plant.initialize(turtleGraphic);
 		turtleGraphic.execute(gc, description);
 	}
 

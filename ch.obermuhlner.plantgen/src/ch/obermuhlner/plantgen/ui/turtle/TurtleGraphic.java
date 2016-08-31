@@ -1,8 +1,8 @@
 package ch.obermuhlner.plantgen.ui.turtle;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -13,7 +13,7 @@ public class TurtleGraphic {
 	
 	private TurtleCommand defaultCommand;
 
-	private Deque<TurtleState> states = new LinkedList<>();
+	private Deque<TurtleState> states = new ArrayDeque<>();
 
 	
 	public TurtleGraphic() {
