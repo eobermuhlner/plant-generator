@@ -7,7 +7,7 @@ import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.command.AngleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.ColorCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.CompositeCommand;
-import ch.obermuhlner.plantgen.ui.turtle.command.ForwardCommand;
+import ch.obermuhlner.plantgen.ui.turtle.command.LeafCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.PopCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.PushCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.RandomChangeAngleCommand;
@@ -88,6 +88,7 @@ public class Plant {
 		double turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
 		double step = random.nextDouble() * 20 + 10;
 		double standardDeviation = random.nextDouble() * 0.4 + 0.1;
+		double leafFactor = random.nextDouble() * 3.0 + 1.0;
 				
 		turtleGraphic.addCommand('[', new PushCommand());
 		turtleGraphic.addCommand(']', new PopCommand());
@@ -102,9 +103,13 @@ public class Plant {
 				new ThicknessFactorCommand(0.9),
 				new ColorCommand(Color.BROWN),
 				new RandomForwardCommand(random, step, standardDeviation)));
+		turtleGraphic.addCommand('t', new CompositeCommand(
+				new ThicknessFactorCommand(0.5),
+				new ColorCommand(Color.BROWN),
+				new RandomForwardCommand(random, step, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
 				new ColorCommand(Color.GREEN), 
-				new ForwardCommand(step)));
+				new LeafCommand(leafFactor)));
 	}
 	
 	public String getDescription() {

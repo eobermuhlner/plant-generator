@@ -18,6 +18,7 @@ public class ColorCommand implements TurtleCommand {
 	@Override
 	public void execute(GraphicsContext gc, Deque<TurtleState> turtleStates) {
 		gc.setStroke(color);
+		gc.setFill(color);
 	}
 
 }
