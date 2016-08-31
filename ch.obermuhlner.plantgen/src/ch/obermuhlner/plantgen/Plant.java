@@ -13,6 +13,7 @@ import ch.obermuhlner.plantgen.ui.turtle.command.PushCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.RandomChangeAngleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.RandomForwardCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.RandomTurnCommand;
+import ch.obermuhlner.plantgen.ui.turtle.command.ThicknessFactorCommand;
 import javafx.scene.paint.Color;
 
 public class Plant {
@@ -97,8 +98,13 @@ public class Plant {
 		turtleGraphic.addCommand('-', new RandomTurnCommand(random, -turnAngle, standardDeviation));
 		turtleGraphic.addCommand('+', new RandomTurnCommand(random, turnAngle, standardDeviation));
 		turtleGraphic.addCommand('~', new RandomChangeAngleCommand(random, turnAngle, standardDeviation));
-		turtleGraphic.addCommand('T', new CompositeCommand(new ColorCommand(Color.BROWN), new RandomForwardCommand(random, step, standardDeviation)));
-		turtleGraphic.addCommand('L', new CompositeCommand(new ColorCommand(Color.GREEN), new ForwardCommand(step)));
+		turtleGraphic.addCommand('T', new CompositeCommand(
+				new ThicknessFactorCommand(0.9),
+				new ColorCommand(Color.BROWN),
+				new RandomForwardCommand(random, step, standardDeviation)));
+		turtleGraphic.addCommand('L', new CompositeCommand(
+				new ColorCommand(Color.GREEN), 
+				new ForwardCommand(step)));
 	}
 	
 	public String getDescription() {

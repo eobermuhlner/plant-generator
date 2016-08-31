@@ -29,8 +29,9 @@ public class RandomForwardCommand implements TurtleCommand {
 		double dx = randomStep * Math.cos(state.angle);
 		double dy = randomStep * Math.sin(state.angle);
 		
+		gc.setLineWidth(state.thickness);
 		gc.strokeLine(state.x, state.y, state.x+dx, state.y+dy);
-		
+
 		state.x += dx;
 		state.y += dy;
 	}

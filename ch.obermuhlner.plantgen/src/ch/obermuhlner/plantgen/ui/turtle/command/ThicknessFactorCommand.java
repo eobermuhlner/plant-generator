@@ -6,19 +6,19 @@ import ch.obermuhlner.plantgen.ui.turtle.TurtleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.scene.canvas.GraphicsContext;
 
-public class PushCommand implements TurtleCommand {
+public class ThicknessFactorCommand implements TurtleCommand {
 
+	private double thicknessFactor;
+
+	public ThicknessFactorCommand(double thicknessFactor) {
+		this.thicknessFactor = thicknessFactor;
+	}
+	
 	@Override
 	public void execute(GraphicsContext gc, Deque<TurtleState> turtleStates) {
 		TurtleState state = turtleStates.peek();
-
-		TurtleState newState = new TurtleState();
-		newState.x = state.x;
-		newState.y = state.y;
-		newState.angle = state.angle;
-		newState.thickness = state.thickness;
 		
-		turtleStates.push(newState);
+		state.thickness *= thicknessFactor;
 	}
 
 }

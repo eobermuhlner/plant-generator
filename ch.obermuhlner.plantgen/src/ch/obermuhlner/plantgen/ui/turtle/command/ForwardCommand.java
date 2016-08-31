@@ -21,6 +21,7 @@ public class ForwardCommand implements TurtleCommand {
 		double dx = step * Math.cos(state.angle);
 		double dy = step * Math.sin(state.angle);
 		
+		gc.setLineWidth(state.thickness);
 		gc.strokeLine(state.x, state.y, state.x+dx, state.y+dy);
 		
 		state.x += dx;
