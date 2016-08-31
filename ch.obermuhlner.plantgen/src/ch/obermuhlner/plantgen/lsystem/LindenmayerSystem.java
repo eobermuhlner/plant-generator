@@ -19,7 +19,7 @@ public class LindenmayerSystem {
 			
 			int pos = out.length();
 			while (pos >= 0) {
-				pos = in.lastIndexOf(key, pos-1);
+				pos = out.lastIndexOf(key, pos-1);
 				if (pos >= 0) {
 					out = out.substring(0, pos) + rule.getValue() + out.substring(pos + key.length()); 
 				}
