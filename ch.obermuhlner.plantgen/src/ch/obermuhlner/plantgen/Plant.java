@@ -48,6 +48,7 @@ public class Plant {
 		"TT[-BL][+BL]TT[-BL][+BL]P", // christmas tree
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
 		"[-TTTPL][TTTPL][+TTTPL]",
+		"T[-tp]T[+tp]Pt",
 	};
 
 	/**
