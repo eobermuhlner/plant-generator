@@ -11,13 +11,13 @@ public class RandomForwardCommand implements TurtleCommand {
 
 	private Random random;
 	
-	private double step;
+	private double stepFactor;
 
 	private double standardDeviation;
 
-	public RandomForwardCommand(Random random, double step, double standardDeviation) {
+	public RandomForwardCommand(Random random, double stepFactor, double standardDeviation) {
 		this.random = random;
-		this.step = step;
+		this.stepFactor = stepFactor;
 		this.standardDeviation = standardDeviation;
 	}
 	
@@ -25,7 +25,7 @@ public class RandomForwardCommand implements TurtleCommand {
 	public void execute(GraphicsContext gc, Deque<TurtleState> turtleStates) {
 		TurtleState state = turtleStates.peek();
 		
-		double randomStep = (random.nextGaussian() * standardDeviation + 1.0) * step;
+		double randomStep = (random.nextGaussian() * standardDeviation + 1.0) * stepFactor * state.length;
 		double dx = randomStep * Math.cos(state.angle);
 		double dy = randomStep * Math.sin(state.angle);
 		

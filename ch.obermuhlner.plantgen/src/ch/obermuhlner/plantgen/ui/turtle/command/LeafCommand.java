@@ -5,6 +5,7 @@ import java.util.Deque;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.StrokeLineCap;
 
 public class LeafCommand implements TurtleCommand {
 
@@ -22,10 +23,12 @@ public class LeafCommand implements TurtleCommand {
 
 		double radius = leafFactor + state.thickness * leafThicknessFactor;
 		
-		double top = state.x - radius;
-		double left = state.y - radius;
+		double dx = radius * Math.cos(state.angle);
+		double dy = radius * Math.sin(state.angle);
 		
-		gc.fillOval(top, left, radius * 2, radius * 2);
+		gc.setLineWidth(radius);
+		gc.strokeLine(state.x, state.y, state.x+dx, state.y+dy);
+
 	}
 
 }

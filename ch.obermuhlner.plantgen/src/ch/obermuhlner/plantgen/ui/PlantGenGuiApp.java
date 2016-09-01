@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
 
 public class PlantGenGuiApp extends Application {
@@ -40,6 +41,7 @@ public class PlantGenGuiApp extends Application {
 		initialState.y = 590;
 		initialState.angle = -Math.PI / 2.0;
 		initialState.thickness = 1.0;
+		initialState.length = 10.0;
 		turtleGraphic = new TurtleGraphic(initialState);
 
 		Random random = new Random();
@@ -47,8 +49,8 @@ public class PlantGenGuiApp extends Application {
 		Plant plant = new Plant(random);
 		String description = plant.getDescription();
 		
-		gc.setStroke(Color.RED);
-		gc.setLineWidth(4);
+		gc.setLineCap(StrokeLineCap.ROUND);
+
 		plant.initialize(turtleGraphic);
 		turtleGraphic.execute(gc, description);
 	}
