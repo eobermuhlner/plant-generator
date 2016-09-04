@@ -83,7 +83,7 @@ public class Plant {
 		
 		description = "S";
 		for (int i = 0; i < random.nextInt(5) + 3; i++) {
-			description = lindenmayerSystem.expand(description);
+			description = lindenmayerSystem.expand(random, description);
 		}
 		
 		System.out.println(description);
