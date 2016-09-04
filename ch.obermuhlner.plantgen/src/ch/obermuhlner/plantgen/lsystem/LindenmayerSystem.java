@@ -24,12 +24,11 @@ public class LindenmayerSystem {
 		for (Entry<String, List<StochasticRule>> stochasticRules : rules.entrySet()) {
 			String key = stochasticRules.getKey();
 			
-			String rule = pickRule(random, stochasticRules.getValue());
-			
 			int pos = out.length();
 			while (pos >= 0) {
 				pos = out.lastIndexOf(key, pos-1);
 				if (pos >= 0) {
+					String rule = pickRule(random, stochasticRules.getValue());
 					out = out.substring(0, pos) + rule + out.substring(pos + key.length()); 
 				}
 			}
