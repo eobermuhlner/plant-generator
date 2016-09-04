@@ -2,7 +2,8 @@ package ch.obermuhlner.plantgen.ui;
 
 import java.util.Random;
 
-import ch.obermuhlner.plantgen.Plant;
+import ch.obermuhlner.plantgen.RandomStandardPlant;
+import ch.obermuhlner.plantgen.TestPlant;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.application.Application;
@@ -46,7 +47,8 @@ public class PlantGenGuiApp extends Application {
 
 		Random random = new Random();
 		
-		Plant plant = new Plant(random);
+		//RandomStandardPlant plant = new RandomStandardPlant(random);
+		TestPlant plant = new TestPlant(random);
 		String description = plant.getDescription();
 		
 		gc.setLineCap(StrokeLineCap.ROUND);

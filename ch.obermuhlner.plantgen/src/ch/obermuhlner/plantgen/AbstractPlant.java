@@ -2,7 +2,6 @@ package ch.obermuhlner.plantgen;
 
 import java.util.Random;
 
-import ch.obermuhlner.plantgen.lsystem.LindenmayerSystem;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.command.AngleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.ColorCommand;
@@ -17,77 +16,18 @@ import ch.obermuhlner.plantgen.ui.turtle.command.RandomTurnCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.ThicknessFactorCommand;
 import javafx.scene.paint.Color;
 
-public class Plant {
+public abstract class AbstractPlant {
 
-	private Random random;
+	protected Random random;
 
 	private String description;
 
-	/**
-	 * Seed rules
-	 */
-	private static final String[] S_RULES = {
-			"P",
-			"[-LP][+LP][P]",
-			"[P][rTuSP][lTuSP]",
-			"TTTTTP",
-			"TTT[-LP]T[+LP]TP",
-		};
-
-	/**
-	 * Point rules
-	 */
-	private static final String[] P_RULES = {
-		"T[-PL][PL][+PL]",
-		"TT[-P][PL][+P]",
-		"[-P][+P][-TP][+TP]L",
-		"TT[P][-TPL][+TPL]",
-		"PT[-Pt[-L]][+Pt[+L]]", // cool tree
-		"[P]~PT[-L]~PT[+L]", // vines
-		"P~T[-L]~T[+L]", // single vine
-		"T[-PT[-L]][+PT[+L]]",
-		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
-		"TT[-BL][+BL]TT[-BL][+BL]P", // christmas tree
-		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
-		"[-TTTPL][TTTPL][+TTTPL]",
-		"T[-tpL]T[+tpL]Pt",
-	};
-
-	/**
-	 * Branch rules
-	 */
-	private static final String[] B_RULES = {
-//		"tB[dL]",
-		"t"
-	};
-	
-	/**
-	 * Node rules
-	 */
-	private static final String[] N_RULES = {
-//		"[-L][--L][---L][----L][L][+L][++L][+++L][++++L]",
-		"[-L][+L]",
-	};
-	
-	public Plant(Random random) {
+	public AbstractPlant(Random random) {
 		this.random = random;
-		init();
+		this.description = createDescription();
 	}
-	
-	private void init() {
-		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-		lindenmayerSystem.addRule("S", RandomUtil.next(random, S_RULES));
-		lindenmayerSystem.addRule("P", RandomUtil.next(random, P_RULES));
-		lindenmayerSystem.addRule("B", RandomUtil.next(random, B_RULES));
-		lindenmayerSystem.addRule("N", RandomUtil.next(random, N_RULES));
-		
-		description = "S";
-		for (int i = 0; i < random.nextInt(5) + 3; i++) {
-			description = lindenmayerSystem.expand(random, description);
-		}
-		
-		System.out.println(description);
-	}
+
+	abstract protected String createDescription();
 	
 	public void initialize(TurtleGraphic turtleGraphic) {
 		double turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
@@ -126,6 +66,7 @@ public class Plant {
 	}
 	
 	public String getDescription() {
+		System.out.println(description);
 		return description;
 	}
 }
