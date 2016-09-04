@@ -28,8 +28,10 @@ public class Plant {
 	 */
 	private static final String[] S_RULES = {
 			"P",
-			"[P][rTuT[P]][lTuT[P]]",
+			"[-LP][+LP][P]",
+			"[P][rTuSP][lTuSP]",
 			"TTTTTP",
+			"TTT[-LP]T[+LP]TP",
 		};
 
 	/**
@@ -37,7 +39,7 @@ public class Plant {
 	 */
 	private static final String[] P_RULES = {
 		"T[-PL][PL][+PL]",
-		"TT[-P][P[L]][+P]",
+		"TT[-P][PL][+P]",
 		"[-P][+P][-TP][+TP]L",
 		"TT[P][-TPL][+TPL]",
 		"PT[-Pt[-L]][+Pt[+L]]", // cool tree
