@@ -35,7 +35,7 @@ public abstract class AbstractPlant {
 		double initialThickness = random.nextDouble() * 10 + 10;
 		double initialLength = random.nextDouble() * 30 + 20;
 		double lengthFactor = 1.0;
-		double leafFactor = random.nextDouble() * 2.0;
+		double leafFactor = random.nextDouble() * 2.0 + 1.0;
 		double leafThicknessFactor = random.nextDouble() * 4.0;
 		
 		turtleGraphic.getState().thickness = initialThickness;
