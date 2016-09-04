@@ -47,8 +47,8 @@ public class PlantGenGuiApp extends Application {
 
 		Random random = new Random();
 		
-		//RandomStandardPlant plant = new RandomStandardPlant(random);
-		TestPlant plant = new TestPlant(random);
+		RandomStandardPlant plant = new RandomStandardPlant(random);
+//		TestPlant plant = new TestPlant(random);
 		String description = plant.getDescription();
 		
 		gc.setLineCap(StrokeLineCap.ROUND);
