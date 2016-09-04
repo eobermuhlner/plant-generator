@@ -1,8 +1,7 @@
 package ch.obermuhlner.plantgen.lsystem;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -10,7 +9,7 @@ import java.util.TreeMap;
 
 public class LindenmayerSystem {
 
-	private Map<String, Collection<StochasticRule>> rules = new TreeMap<>();
+	private Map<String, List<StochasticRule>> rules = new TreeMap<>();
 	
 	public void addRule(String key, String rule) {
 		addRule(key, 1, rule);
@@ -22,7 +21,7 @@ public class LindenmayerSystem {
 	
 	public String expand(Random random, String in) {
 		String out = in;
-		for (Entry<String, Collection<StochasticRule>> stochasticRules : rules.entrySet()) {
+		for (Entry<String, List<StochasticRule>> stochasticRules : rules.entrySet()) {
 			String key = stochasticRules.getKey();
 			
 			String rule = pickRule(random, stochasticRules.getValue());
@@ -38,7 +37,7 @@ public class LindenmayerSystem {
 		return out;
 	}
 
-	private String pickRule(Random random, Collection<StochasticRule> stochasticRules) {
+	private String pickRule(Random random, List<StochasticRule> stochasticRules) {
 		double sum = 0;
 		
 		for (StochasticRule stochasticRule : stochasticRules) {
