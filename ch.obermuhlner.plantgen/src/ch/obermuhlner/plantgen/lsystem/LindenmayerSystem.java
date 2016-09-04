@@ -4,19 +4,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Random;
 import java.util.TreeMap;
 
 public class LindenmayerSystem {
 
+	private static final Pattern RULE_PATTERN = Pattern.compile("^([0-9]+):(.*)");
+	
 	private Map<String, List<StochasticRule>> rules = new TreeMap<>();
 	
+	/**
+	 * Adds one or multiple expansion rules for the specified key.
+	 * 
+	 * <p>Multiple rules are separated by ','.</p>
+	 * <p>Each rule may be prefixed with a probability weight separated by ':'.
+	 * If no probability weight is specified, a default value of 1.0 will be used.</p>
+	 * 
+	 * <p>Examples:</p>
+	 * <ul>
+	 * <li>"AAA"</li>
+	 * <li>"AAA,BBB"</li>
+	 * <li>"10:AAA,90:BBB"</li>
+	 * </ul>
+	 * 
+	 * @param key the key
+	 * @param rule the expanded rule
+	 */
 	public void addRule(String key, String rule) {
-		addRule(key, 1, rule);
+		String[] splitRules = rule.split(Pattern.quote(","));
+		for (String splitRule : splitRules) {
+			double probability = 1.0;
+		
+			Matcher matcher = RULE_PATTERN.matcher(splitRule);
+			if (matcher.matches()) {
+				probability = Double.parseDouble(matcher.group(1));
+				splitRule = matcher.group(2);
+			} 
+			addRule(key, probability, splitRule);
+		}
 	}
 	
-	public void addRule(String key, double probability, String rule) {
-		rules.computeIfAbsent(key, k -> new ArrayList<>()).add(new StochasticRule(probability, rule));
+	/**
+	 * Adds an expansion rule for the specified key with the specified probability.
+	 * 
+	 * <p>The probability weights for all rules with the same key will be added up,
+	 * this sum will be 100% probability.</p>
+	 * 
+	 * @param key the key
+	 * @param probabilityWeight the probability weight that this rule will be executed
+	 * @param rule the expanded rule
+	 */
+	public void addRule(String key, double probabilityWeight, String rule) {
+		rules.computeIfAbsent(key, k -> new ArrayList<>()).add(new StochasticRule(probabilityWeight, rule));
 	}
 	
 	public String expand(Random random, String in) {
@@ -40,14 +81,14 @@ public class LindenmayerSystem {
 		double sum = 0;
 		
 		for (StochasticRule stochasticRule : stochasticRules) {
-			sum += stochasticRule.probability;
+			sum += stochasticRule.probabilityWeight;
 		}
 		
 		double r = random.nextDouble() * sum;
 
 		sum = 0;
 		for (StochasticRule stochasticRule : stochasticRules) {
-			sum += stochasticRule.probability;
+			sum += stochasticRule.probabilityWeight;
 			if (r <= sum) {
 				return stochasticRule.rule;
 			}
@@ -57,11 +98,11 @@ public class LindenmayerSystem {
 	}
 	
 	private class StochasticRule {
-		public final double probability;
+		public final double probabilityWeight;
 		public final String rule;
 
-		public StochasticRule(double probability, String rule) {
-			this.probability = probability;
+		public StochasticRule(double probabilityWeight, String rule) {
+			this.probabilityWeight = probabilityWeight;
 			this.rule = rule;
 		}
 	}

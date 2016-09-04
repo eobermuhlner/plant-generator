@@ -15,10 +15,15 @@ public class TestPlant extends AbstractPlant {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
 
 		lindenmayerSystem.addRule("S", "TTTP");
-		lindenmayerSystem.addRule("P", 2, "T[-TLP]P");
-		lindenmayerSystem.addRule("P", 2, "T[+TLP]P");
-		lindenmayerSystem.addRule("P", 3, "T[-TLP][+TLP]P");
-		lindenmayerSystem.addRule("P", 1, "TP");
+//		lindenmayerSystem.addRule("P", 2, "T[-TLP]P");
+//		lindenmayerSystem.addRule("P", 2, "T[+TLP]P");
+//		lindenmayerSystem.addRule("P", 3, "T[-TLP][+TLP]P");
+//		lindenmayerSystem.addRule("P", 1, "TP");
+		lindenmayerSystem.addRule("P", ""
+				+ "2:T[-TLP]P,"
+				+ "2:T[TLP]P,"
+				+ "3:T[-TLP][+TLP]P,"
+				+ "1:TP");
 		
 		String description = "S";
 		for (int i = 0; i < random.nextInt(3) + 5; i++) {
