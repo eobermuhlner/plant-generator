@@ -48,7 +48,7 @@ public class Plant {
 		"TT[-BL][+BL]TT[-BL][+BL]P", // christmas tree
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
 		"[-TTTPL][TTTPL][+TTTPL]",
-		"T[-tp]T[+tp]Pt",
+		"T[-tpL]T[+tpL]Pt",
 	};
 
 	/**
@@ -119,7 +119,7 @@ public class Plant {
 				new ColorCommand(Color.BROWN),
 				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
-				new ColorCommand(Color.GREEN), 
+				new ColorCommand(Color.rgb(0, 255, 0, 0.5)), 
 				new LeafCommand(leafFactor, leafThicknessFactor)));
 	}
 	
