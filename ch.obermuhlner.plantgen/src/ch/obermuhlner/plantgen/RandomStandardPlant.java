@@ -11,10 +11,10 @@ public class RandomStandardPlant extends AbstractPlant {
 	 */
 	private static final String[] S_RULES = {
 		"P",
-		"[-LP][+LP][P]",
-		"[P][rTuSP][lTuSP]",
-		"TTTTTP",
-		"TTT[-LP]T[+LP]TP",
+//		"[-LP][+LP][P]",
+//		"[P][rTuSP][lTuSP]",
+//		"TTTTTP",
+//		"TTT[-LP]T[+LP]TP",
 	};
 
 	/**
@@ -30,7 +30,8 @@ public class RandomStandardPlant extends AbstractPlant {
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
 		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
-		"TT[-BL][+BL]TT[-BL][+BL]P", // christmas tree
+		"TT[-BL][+BL]P", // christmas tree (gegenstaendig)
+		"T[-BL]T[+BL]P", // christmas tree (wechselstaendig)
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
 		"[-TTTPL][TTTPL][+TTTPL]",
 		"T[-tpL]T[+tpL]Pt",
@@ -40,8 +41,11 @@ public class RandomStandardPlant extends AbstractPlant {
 	 * Branch rules
 	 */
 	private static final String[] B_RULES = {
-//		"tB[dL]",
-		"t"
+		"T[L]B",
+		"T[-L][+L]B",
+		"T[-L]T[+L]B",
+		"t[L]B",
+		"t[-L][+L]B",
 	};
 	
 	/**
