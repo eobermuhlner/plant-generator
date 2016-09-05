@@ -23,7 +23,7 @@ public class PlantGenGuiApp extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Random Plant Browser");
         Group root = new Group();
-        Canvas canvas = new Canvas(800, 600);
+        Canvas canvas = new Canvas(1200, 800);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setOnMouseClicked(mouseEvent -> drawPlant(gc));
         drawPlant(gc);
@@ -38,8 +38,8 @@ public class PlantGenGuiApp extends Application {
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		
 		TurtleState initialState = new TurtleState();
-		initialState.x = 400;
-		initialState.y = 590;
+		initialState.x = 600;
+		initialState.y = 790;
 		initialState.angle = -Math.PI / 2.0;
 		initialState.thickness = 1.0;
 		initialState.length = 10.0;
