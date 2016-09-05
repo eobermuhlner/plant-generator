@@ -61,20 +61,21 @@ public class LindenmayerSystem {
 	}
 	
 	public String expand(Random random, String in) {
-		String out = in;
-		for (Entry<String, List<StochasticRule>> stochasticRules : rules.entrySet()) {
-			String key = stochasticRules.getKey();
+		StringBuilder out = new StringBuilder();
+
+		for (int i = 0; i < in.length(); i++) {
+			String inKey = in.substring(i, i+1);
 			
-			int pos = out.length();
-			while (pos >= 0) {
-				pos = out.lastIndexOf(key, pos-1);
-				if (pos >= 0) {
-					String rule = pickRule(random, stochasticRules.getValue());
-					out = out.substring(0, pos) + rule + out.substring(pos + key.length()); 
-				}
+			List<StochasticRule> stochasticRules = rules.get(inKey);
+			if (stochasticRules != null) {
+				String rule = pickRule(random, stochasticRules);
+				out.append(rule);
+			} else {
+				out.append(inKey);
 			}
 		}
-		return out;
+
+		return out.toString();
 	}
 
 	private String pickRule(Random random, List<StochasticRule> stochasticRules) {
