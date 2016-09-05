@@ -2,6 +2,7 @@ package ch.obermuhlner.plantgen;
 
 import java.util.Random;
 
+import ch.obermuhlner.plantgen.lsystem.LindenmayerSystem;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.command.AngleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.ColorCommand;
@@ -27,8 +28,19 @@ public abstract class AbstractPlant {
 		this.description = createDescription();
 	}
 
-	abstract protected String createDescription();
-	
+	private String createDescription() {
+		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
+		
+		String description = initialize(lindenmayerSystem);
+		for (int i = 0; i < random.nextInt(5) + 5; i++) {
+			description = lindenmayerSystem.expand(random, description);
+		}
+		
+		return description;
+	}
+
+	protected abstract String initialize(LindenmayerSystem lindenmayerSystem);
+
 	public void initialize(TurtleGraphic turtleGraphic) {
 		double turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
 		double standardDeviation = random.nextDouble() * 0.0 + 0.1;

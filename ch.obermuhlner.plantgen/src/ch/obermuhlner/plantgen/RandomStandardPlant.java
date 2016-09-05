@@ -10,12 +10,12 @@ public class RandomStandardPlant extends AbstractPlant {
 	 * Seed rules
 	 */
 	private static final String[] S_RULES = {
-			"P",
-			"[-LP][+LP][P]",
-			"[P][rTuSP][lTuSP]",
-			"TTTTTP",
-			"TTT[-LP]T[+LP]TP",
-		};
+		"P",
+		"[-LP][+LP][P]",
+		"[P][rTuSP][lTuSP]",
+		"TTTTTP",
+		"TTT[-LP]T[+LP]TP",
+	};
 
 	/**
 	 * Point rules
@@ -25,7 +25,7 @@ public class RandomStandardPlant extends AbstractPlant {
 		"TT[-P][PL][+P]",
 		"[-P][+P][-TP][+TP]L",
 		"TT[P][-TPL][+TPL]",
-		"PT[-Pt[-L]][+Pt[+L]]", // cool tree
+		"5:PT[-Pt[-L]][+Pt[+L]],1:PT[-Pt[-L]],1:PT[+Pt[+L]]", // cool tree
 		"[P]~PT[-L]~PT[+L]", // vines
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
@@ -57,20 +57,12 @@ public class RandomStandardPlant extends AbstractPlant {
 		super(random);
 	}
 
-
-	@Override
-	protected String createDescription() {
-		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
+	protected String initialize(LindenmayerSystem lindenmayerSystem) {
 		lindenmayerSystem.addRule("S", RandomUtil.next(random, S_RULES));
 		lindenmayerSystem.addRule("P", RandomUtil.next(random, P_RULES));
 		lindenmayerSystem.addRule("B", RandomUtil.next(random, B_RULES));
 		lindenmayerSystem.addRule("N", RandomUtil.next(random, N_RULES));
 		
-		String description = "S";
-		for (int i = 0; i < random.nextInt(5) + 3; i++) {
-			description = lindenmayerSystem.expand(random, description);
-		}
-		
-		return description;
+		return "S";
 	}
 }

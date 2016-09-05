@@ -10,10 +10,7 @@ public class TestPlant extends AbstractPlant {
 		super(random);
 	}
 
-	@Override
-	protected String createDescription() {
-		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-
+	protected String initialize(LindenmayerSystem lindenmayerSystem) {
 		lindenmayerSystem.addRule("S", "TTTP");
 //		lindenmayerSystem.addRule("P", 2, "T[-TLP]P");
 //		lindenmayerSystem.addRule("P", 2, "T[+TLP]P");
@@ -25,12 +22,7 @@ public class TestPlant extends AbstractPlant {
 				+ "3:T[-TLP][+TLP]P,"
 				+ "1:TP");
 		
-		String description = "S";
-		for (int i = 0; i < random.nextInt(3) + 5; i++) {
-			description = lindenmayerSystem.expand(random, description);
-		}
-		
-		return description;
+		return "S";
 	}
 
 }
