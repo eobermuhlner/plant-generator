@@ -18,7 +18,20 @@ public class LindenmayerSystemTest {
 		assertEquals("B", lindenmayerSystem.expand(random, "A"));
 		assertEquals("X", lindenmayerSystem.expand(random, "X"));
 	}
-	
+
+	@Test
+	public void testSetScript() {
+		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
+		Random random = new Random(1);
+		
+		lindenmayerSystem.setScript(""
+				+ "A=B;"
+				+ "C=D;");
+
+		assertEquals("B", lindenmayerSystem.expand(random, "A"));
+		assertEquals("D", lindenmayerSystem.expand(random, "C"));
+	}
+
 	@Test
 	public void testRecursion1() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
@@ -38,7 +51,8 @@ public class LindenmayerSystemTest {
 		lindenmayerSystem.addRule("A", "<BA>");
 		lindenmayerSystem.addRule("B", "[C]");
 		
-		assertEquals("{<[C]A>}", lindenmayerSystem.expand(random, "{A}"));
+		assertEquals("{<BA>}", lindenmayerSystem.expand(random, "{A}"));
+		assertEquals("{<[C]<BA>>}", lindenmayerSystem.expand(random, lindenmayerSystem.expand(random, "{A}")));
 	}
 
 

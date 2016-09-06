@@ -10,9 +10,24 @@ import java.util.regex.Pattern;
 
 public class LindenmayerSystem {
 
-	private static final Pattern RULE_PATTERN = Pattern.compile("^([0-9]+):(.*)");
+	private static final Pattern ASSIGNMENT_RULE_PATTERN = Pattern.compile("^(.+)=(.*)");
+	private static final Pattern STOCHASTIC_RULE_PATTERN = Pattern.compile("^([0-9]+):(.*)");
 	
 	private Map<String, List<StochasticRule>> rules = new TreeMap<>();
+	
+	public void setScript(String script) {
+		String[] splitScript = script.split(Pattern.quote(";"));
+		for (String assignment : splitScript) {
+			Matcher matcher = ASSIGNMENT_RULE_PATTERN.matcher(assignment);
+			if (matcher.matches()) {
+				String key = matcher.group(1);
+				String rule = matcher.group(2);
+				addRule(key, rule);
+			} else {
+				throw new IllegalArgumentException("Invalid assignment: " + assignment);
+			}
+		}
+	}
 	
 	/**
 	 * Adds one or multiple expansion rules for the specified key.
@@ -36,7 +51,7 @@ public class LindenmayerSystem {
 		for (String splitRule : splitRules) {
 			double probability = 1.0;
 		
-			Matcher matcher = RULE_PATTERN.matcher(splitRule);
+			Matcher matcher = STOCHASTIC_RULE_PATTERN.matcher(splitRule);
 			if (matcher.matches()) {
 				probability = Double.parseDouble(matcher.group(1));
 				splitRule = matcher.group(2);
