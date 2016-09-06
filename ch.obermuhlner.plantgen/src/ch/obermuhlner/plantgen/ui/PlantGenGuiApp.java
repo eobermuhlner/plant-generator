@@ -34,9 +34,7 @@ public class PlantGenGuiApp extends Application {
 
         Canvas canvas = new Canvas(1200, 600);
         mainBorderPane.setCenter(canvas);
-        
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        canvas.setOnMouseClicked(mouseEvent -> drawPlant(gc));
 
         BorderPane editBorderPane = new BorderPane();
         mainBorderPane.setTop(editBorderPane);
@@ -56,12 +54,18 @@ public class PlantGenGuiApp extends Application {
         Button randomButton = new Button("Random");
         buttonBox.getChildren().add(randomButton);
         randomButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
-        	drawPlant(scriptTextArea.getText(), gc);
+        	runRandomScript(gc, scriptTextArea);
         });
 
+        runRandomScript(gc, scriptTextArea);
+        
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+	}
+
+	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
+		scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
+		drawPlant(scriptTextArea.getText(), gc);
 	}
 
 	private void drawPlant(String script, GraphicsContext gc) {
