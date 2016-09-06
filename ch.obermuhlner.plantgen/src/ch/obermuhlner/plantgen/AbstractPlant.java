@@ -29,11 +29,11 @@ public abstract class AbstractPlant {
 	}
 
 	private String createDescription() {
-		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
+		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem(random);
 		
 		String description = initialize(lindenmayerSystem);
 		for (int i = 0; i < random.nextInt(5) + 5; i++) {
-			description = lindenmayerSystem.expand(random, description);
+			description = lindenmayerSystem.expand(description);
 		}
 		
 		return description;

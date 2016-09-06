@@ -2,8 +2,6 @@ package ch.obermuhlner.plantgen.lsystem;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Random;
-
 import org.junit.Test;
 
 public class LindenmayerSystemTest {
@@ -11,55 +9,50 @@ public class LindenmayerSystemTest {
 	@Test
 	public void testBasics() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-		Random random = new Random(1);
 		
 		lindenmayerSystem.addRule("A", "B");
 
-		assertEquals("B", lindenmayerSystem.expand(random, "A"));
-		assertEquals("X", lindenmayerSystem.expand(random, "X"));
+		assertEquals("B", lindenmayerSystem.expand("A"));
+		assertEquals("X", lindenmayerSystem.expand("X"));
 	}
 
 	@Test
 	public void testSetScript() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-		Random random = new Random(1);
 		
 		lindenmayerSystem.setScript(""
 				+ "A=B;"
 				+ "C=D;");
 
-		assertEquals("B", lindenmayerSystem.expand(random, "A"));
-		assertEquals("D", lindenmayerSystem.expand(random, "C"));
+		assertEquals("B", lindenmayerSystem.expand("A"));
+		assertEquals("D", lindenmayerSystem.expand("C"));
 	}
 
 	@Test
 	public void testRecursion1() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-		Random random = new Random(1);
 		
 		lindenmayerSystem.addRule("A", "<BA>");
 		
-		assertEquals("{<BA>}", lindenmayerSystem.expand(random, "{A}"));
-		assertEquals("{<B<BA>>}", lindenmayerSystem.expand(random, lindenmayerSystem.expand(random, "{A}")));
+		assertEquals("{<BA>}", lindenmayerSystem.expand("{A}"));
+		assertEquals("{<B<BA>>}", lindenmayerSystem.expand(lindenmayerSystem.expand("{A}")));
 	}
 
 	@Test
 	public void testRecursion2() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-		Random random = new Random(1);
 		
 		lindenmayerSystem.addRule("A", "<BA>");
 		lindenmayerSystem.addRule("B", "[C]");
 		
-		assertEquals("{<BA>}", lindenmayerSystem.expand(random, "{A}"));
-		assertEquals("{<[C]<BA>>}", lindenmayerSystem.expand(random, lindenmayerSystem.expand(random, "{A}")));
+		assertEquals("{<BA>}", lindenmayerSystem.expand("{A}"));
+		assertEquals("{<[C]<BA>>}", lindenmayerSystem.expand(lindenmayerSystem.expand("{A}")));
 	}
 
 
 	@Test
 	public void testStochastic() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem();
-		Random random = new Random(1);
 		
 		lindenmayerSystem.addRule("A", 1, "1");
 		lindenmayerSystem.addRule("A", 9, "2");
@@ -68,7 +61,7 @@ public class LindenmayerSystemTest {
 		int count1 = 0;
 		int count2 = 0;
 		for (int i = 0; i < n; i++) {
-			String result = lindenmayerSystem.expand(random, "A");
+			String result = lindenmayerSystem.expand("A");
 			if (result.equals("1")) {
 				count1++;
 			}

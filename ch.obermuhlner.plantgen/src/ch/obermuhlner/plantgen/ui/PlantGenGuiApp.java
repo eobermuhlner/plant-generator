@@ -3,7 +3,6 @@ package ch.obermuhlner.plantgen.ui;
 import java.util.Random;
 
 import ch.obermuhlner.plantgen.RandomStandardPlant;
-import ch.obermuhlner.plantgen.TestPlant;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.application.Application;

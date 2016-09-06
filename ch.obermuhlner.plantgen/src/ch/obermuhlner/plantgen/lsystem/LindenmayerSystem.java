@@ -13,7 +13,17 @@ public class LindenmayerSystem {
 	private static final Pattern ASSIGNMENT_RULE_PATTERN = Pattern.compile("^(.+)=(.*)");
 	private static final Pattern STOCHASTIC_RULE_PATTERN = Pattern.compile("^([0-9]+):(.*)");
 	
-	private Map<String, List<StochasticRule>> rules = new TreeMap<>();
+	private final Map<String, List<StochasticRule>> rules = new TreeMap<>();
+
+	private final Random random;
+
+	public LindenmayerSystem() {
+		this(new Random());
+	}
+	
+	public LindenmayerSystem(Random random) {
+		this.random = random;
+	}
 	
 	public void setScript(String script) {
 		String[] splitScript = script.split(Pattern.quote(";"));
@@ -74,7 +84,7 @@ public class LindenmayerSystem {
 		rules.computeIfAbsent(key, k -> new ArrayList<>()).add(new StochasticRule(probabilityWeight, rule));
 	}
 	
-	public String expand(Random random, String in) {
+	public String expand(String in) {
 		StringBuilder out = new StringBuilder();
 
 		for (int i = 0; i < in.length(); i++) {
@@ -82,7 +92,7 @@ public class LindenmayerSystem {
 			
 			List<StochasticRule> stochasticRules = rules.get(inKey);
 			if (stochasticRules != null) {
-				String rule = pickRule(random, stochasticRules);
+				String rule = pickRule(stochasticRules);
 				out.append(rule);
 			} else {
 				out.append(inKey);
@@ -92,7 +102,7 @@ public class LindenmayerSystem {
 		return out.toString();
 	}
 
-	private String pickRule(Random random, List<StochasticRule> stochasticRules) {
+	private String pickRule(List<StochasticRule> stochasticRules) {
 		double sum = 0;
 		
 		for (StochasticRule stochasticRule : stochasticRules) {
