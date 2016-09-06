@@ -17,14 +17,37 @@ public class LindenmayerSystem {
 
 	private final Random random;
 
+	/**
+	 * Creates a {@link LindenmayerSystem} with a randomly seeded {@link Random} instance.
+	 */
 	public LindenmayerSystem() {
 		this(new Random());
 	}
 	
+	/**
+	 * Creates a {@link LindenmayerSystem} with the specified {@link Random} instance.
+	 */
 	public LindenmayerSystem(Random random) {
 		this.random = random;
 	}
 	
+	/**
+	 * Sets the specified script.
+	 * 
+	 * <p>Rule assignments are of the form: <code>key = rule</code>.</p>
+	 * <p>Multiple rule assignments are separated by ';'.</p>
+	 * 
+	 * <p>Example:</p>
+	 * <pre>
+S=TTTP;
+P=2:T[-TLP]P,
+  2:T[TLP]P,
+  3:T[-TLP][+TLP]P,
+  1:TP;
+	 * </pre>
+	 * 
+	 * @param script the script
+	 */
 	public void setScript(String script) {
 		String[] splitScript = script.split(Pattern.quote(";"));
 		for (String assignment : splitScript) {
@@ -42,15 +65,15 @@ public class LindenmayerSystem {
 	/**
 	 * Adds one or multiple expansion rules for the specified key.
 	 * 
-	 * <p>Multiple rules are separated by ','.</p>
+	 * <p>Multiple rules for the same key are separated by ','.</p>
 	 * <p>Each rule may be prefixed with a probability weight separated by ':'.
 	 * If no probability weight is specified, a default value of 1.0 will be used.</p>
 	 * 
 	 * <p>Examples:</p>
 	 * <ul>
-	 * <li>"AAA"</li>
-	 * <li>"AAA,BBB"</li>
-	 * <li>"10:AAA,90:BBB"</li>
+	 * <li><code>"AAA"</code></li>
+	 * <li><code>"AAA,BBB"</code></li>
+	 * <li><code>"10:AAA,90:BBB"</code></li>
 	 * </ul>
 	 * 
 	 * @param key the key
@@ -84,6 +107,16 @@ public class LindenmayerSystem {
 		rules.computeIfAbsent(key, k -> new ArrayList<>()).add(new StochasticRule(probabilityWeight, rule));
 	}
 	
+	/**
+	 * Expands the specified system state according to the rules of this system.
+	 * 
+	 * @param in the input state to be expanded
+	 * @return the expanded output state
+	 * 
+	 * @see #setScript(String)
+	 * @see #addRule(String, String)
+	 * @see #addRule(String, double, String)
+	 */
 	public String expand(String in) {
 		StringBuilder out = new StringBuilder();
 
