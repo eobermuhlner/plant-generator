@@ -21,11 +21,8 @@ public abstract class AbstractPlant {
 
 	protected Random random;
 
-	private String description;
-
 	public AbstractPlant(Random random) {
 		this.random = random;
-		this.description = createDescription();
 	}
 
 	private String createDescription() {
@@ -78,7 +75,6 @@ public abstract class AbstractPlant {
 	}
 	
 	public String getDescription() {
-		System.out.println(description);
-		return description;
+		return createDescription();
 	}
 }
