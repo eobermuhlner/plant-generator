@@ -11,10 +11,10 @@ public class RandomStandardPlant extends AbstractPlant {
 	 */
 	private static final String[] S_RULES = {
 		"P",
-//		"[-LP][+LP][P]",
-//		"[P][rTuSP][lTuSP]",
-//		"TTTTTP",
-//		"TTT[-LP]T[+LP]TP",
+		"[-LP][+LP][P]",
+		"[P][rTuSP][lTuSP]",
+		"TTTTTP",
+		"TTT[-LP]T[+LP]TP",
 	};
 
 	/**
@@ -35,6 +35,7 @@ public class RandomStandardPlant extends AbstractPlant {
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
 		"[-TTTPL][TTTPL][+TTTPL]",
 		"T[-tpL]T[+tpL]Pt",
+		"[lB][rB]", // horizontal branches
 	};
 
 	/**
