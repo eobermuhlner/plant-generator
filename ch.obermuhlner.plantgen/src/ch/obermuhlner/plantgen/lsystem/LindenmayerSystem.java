@@ -49,6 +49,7 @@ P=2:T[-TLP]P,
 	 * @param script the script
 	 */
 	public void setScript(String script) {
+		script = script.replace("\n", "");
 		String[] splitScript = script.split(Pattern.quote(";"));
 		for (String assignment : splitScript) {
 			Matcher matcher = ASSIGNMENT_RULE_PATTERN.matcher(assignment);
