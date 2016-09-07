@@ -144,7 +144,6 @@ public class PlantGenGuiApp extends Application {
 		Random random = new Random();
 		
 		ScriptPlant plant = new ScriptPlant(random, script);
-		String description = plant.getDescription();
 		
 		plant.setTurnAngle(Math.toRadians(turnAngle.get()));
 		plant.setStandardDeviation(standardDeviation.get());
@@ -154,7 +153,9 @@ public class PlantGenGuiApp extends Application {
 		plant.setLeafFactor(leafFactor.get());
 		plant.setLeafThicknessFactor(leafThicknessFactor.get());
 		plant.setSteps((int)steps.get());
-		
+
+		String description = plant.getDescription();
+
 		plant.initialize(turtleGraphic);
 		
 		turtleGraphic.execute(gc, description);
