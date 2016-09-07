@@ -2,7 +2,6 @@ package ch.obermuhlner.plantgen.ui;
 
 import java.util.Random;
 
-import ch.obermuhlner.plantgen.RandomStandardPlant;
 import ch.obermuhlner.plantgen.ScriptPlant;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
@@ -91,30 +90,6 @@ public class PlantGenGuiApp extends Application {
 		turtleGraphic.execute(gc, description);
 	}
 	
-	private void drawPlant(GraphicsContext gc) {
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-		
-		TurtleState initialState = new TurtleState();
-		initialState.x = gc.getCanvas().getWidth() / 2;
-		initialState.y = gc.getCanvas().getHeight() - 10;
-		initialState.angle = -Math.PI / 2.0;
-		initialState.thickness = 1.0;
-		initialState.length = 10.0;
-		turtleGraphic = new TurtleGraphic(initialState);
-
-		Random random = new Random();
-		
-		RandomStandardPlant plant = new RandomStandardPlant(random);
-//		TestPlant plant = new TestPlant(random);
-		String description = plant.getDescription();
-		
-		gc.setLineCap(StrokeLineCap.ROUND);
-
-		plant.initialize(turtleGraphic);
-		turtleGraphic.execute(gc, description);
-	}
-
 	public static void main(String[] args) {
 		launch(args);
 	}
