@@ -67,7 +67,7 @@ public class PlantGenGuiApp extends Application {
         addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 20, 15);
         addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25);
         addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.8, 1.2, 1.0);
-        addSlider(fieldsGridPane, gridRow++, "Leaf Factor", leafFactor, 1, 3, 2);
+        addSlider(fieldsGridPane, gridRow++, "Leaf Factor", leafFactor, 0, 8, 3);
         addSlider(fieldsGridPane, gridRow++, "Leaf Thickness Factor", leafThicknessFactor, 0, 4, 2);
         addSlider(fieldsGridPane, gridRow++, "Steps", steps, 3, 10, 7);
 		
@@ -121,7 +121,7 @@ public class PlantGenGuiApp extends Application {
 		initialThickness.set(random.nextDouble() * 10 + 10);
 		initialLength.set(random.nextDouble() * 30 + 20);
 		lengthFactor.set(1.0);
-		leafFactor.set(random.nextDouble() * 2.0 + 1.0);
+		leafFactor.set(random.nextDouble() * 7.0 + 1.0);
 		leafThicknessFactor.set(random.nextDouble() * 4.0);
 		steps.set(random.nextInt(5) + 5);
 		
