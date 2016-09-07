@@ -6,6 +6,9 @@ import ch.obermuhlner.plantgen.ScriptPlant;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -25,6 +28,9 @@ import javafx.stage.Stage;
 public class PlantGenGuiApp extends Application {
 
 	private TurtleGraphic turtleGraphic;
+	
+	private DoubleProperty turnAngle = new SimpleDoubleProperty();
+	private DoubleProperty standardDeviation = new SimpleDoubleProperty(0.0);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -48,10 +54,12 @@ public class PlantGenGuiApp extends Application {
         
         fieldsGridPane.add(new Text("Turn Angle"), 0, 0);
         Slider turnAngleSlider = new Slider(0, 90, 45);
+        Bindings.bindBidirectional(turnAngle, turnAngleSlider.valueProperty());
 		fieldsGridPane.add(turnAngleSlider, 1, 0);
 		
         fieldsGridPane.add(new Text("Standard Deviation"), 0, 1);
         Slider standardDeviationSlider = new Slider(0, 0.5, 0);
+        Bindings.bindBidirectional(standardDeviation, standardDeviationSlider.valueProperty());
 		fieldsGridPane.add(standardDeviationSlider, 1, 1);
 		
         // script
@@ -65,7 +73,7 @@ public class PlantGenGuiApp extends Application {
         Button runButton = new Button("Run");
         buttonBox.getChildren().add(runButton);
         runButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	drawPlant(scriptTextArea.getText(), turnAngleSlider.getValue(), standardDeviationSlider.getValue(), gc);
+        	drawPlant(scriptTextArea.getText(), gc);
         });
 
         Button randomScriptButton = new Button("Random Script");
@@ -76,10 +84,10 @@ public class PlantGenGuiApp extends Application {
 
         // value events
         turnAngleSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-        	drawPlant(scriptTextArea.getText(), turnAngleSlider.getValue(), standardDeviationSlider.getValue(), gc);
+        	drawPlant(scriptTextArea.getText(), gc);
         });
         standardDeviationSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-        	drawPlant(scriptTextArea.getText(), turnAngleSlider.getValue(), standardDeviationSlider.getValue(), gc);
+        	drawPlant(scriptTextArea.getText(), gc);
         });
 		
         runRandomScript(gc, scriptTextArea);
@@ -92,13 +100,13 @@ public class PlantGenGuiApp extends Application {
 		scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
 
 		Random random = new Random();
-		double turnAngle = random.nextDouble() * 60 + 10;
-		double standardDeviation = random.nextDouble() * 0.0 + 0.1;
+		turnAngle.set(random.nextDouble() * 60 + 10);
+		standardDeviation.set(random.nextDouble() * 0.0 + 0.1);
 		
-		drawPlant(scriptTextArea.getText(), turnAngle, standardDeviation, gc);
+		drawPlant(scriptTextArea.getText(), gc);
 	}
 
-	private void drawPlant(String script, double turnAngle, double standardDeviation, GraphicsContext gc) {
+	private void drawPlant(String script, GraphicsContext gc) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setLineCap(StrokeLineCap.ROUND);
@@ -116,8 +124,8 @@ public class PlantGenGuiApp extends Application {
 		ScriptPlant plant = new ScriptPlant(random, script);
 		String description = plant.getDescription();
 		
-		plant.setTurnAngle(Math.toRadians(turnAngle));
-		plant.setStandardDeviation(standardDeviation);
+		plant.setTurnAngle(Math.toRadians(turnAngle.get()));
+		plant.setStandardDeviation(standardDeviation.get());
 		plant.initialize(turtleGraphic);
 		
 		turtleGraphic.execute(gc, description);
