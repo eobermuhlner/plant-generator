@@ -21,15 +21,51 @@ public abstract class AbstractPlant {
 
 	protected Random random;
 
+	private double turnAngle = Math.toRadians(45);
+	private double standardDeviation = 0.0;
+	private double initialThickness = 10.0;
+	private double initialLength = 40.0;
+	private double lengthFactor = 1.0;
+	private double leafFactor = 1.0;
+	private double leafThicknessFactor = 2.0;
+	private int steps = 5;
+
 	public AbstractPlant(Random random) {
 		this.random = random;
+	}
+
+	public void setTurnAngle(double turnAngle) {
+		this.turnAngle = turnAngle;
+	}
+	
+	public void setStandardDeviation(double standardDeviation) {
+		this.standardDeviation = standardDeviation;
+	}
+	
+	public double getTurnAngle() {
+		return turnAngle;
+	}
+	
+	public double getStandardDeviation() {
+		return standardDeviation;
+	}
+	
+	public void randomize() {
+		turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
+		standardDeviation = random.nextDouble() * 0.0 + 0.1;
+		initialThickness = random.nextDouble() * 10 + 10;
+		initialLength = random.nextDouble() * 30 + 20;
+		lengthFactor = 1.0;
+		leafFactor = random.nextDouble() * 2.0 + 1.0;
+		leafThicknessFactor = random.nextDouble() * 4.0;
+		steps = random.nextInt(5) + 5;
 	}
 
 	private String createDescription() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem(random);
 		
 		String description = initialize(lindenmayerSystem);
-		for (int i = 0; i < random.nextInt(5) + 5; i++) {
+		for (int i = 0; i < steps; i++) {
 			description = lindenmayerSystem.expand(description);
 		}
 		
@@ -39,14 +75,6 @@ public abstract class AbstractPlant {
 	protected abstract String initialize(LindenmayerSystem lindenmayerSystem);
 
 	public void initialize(TurtleGraphic turtleGraphic) {
-		double turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
-		double standardDeviation = random.nextDouble() * 0.0 + 0.1;
-		double initialThickness = random.nextDouble() * 10 + 10;
-		double initialLength = random.nextDouble() * 30 + 20;
-		double lengthFactor = 1.0;
-		double leafFactor = random.nextDouble() * 2.0 + 1.0;
-		double leafThicknessFactor = random.nextDouble() * 4.0;
-		
 		turtleGraphic.getState().thickness = initialThickness;
 		turtleGraphic.getState().length = initialLength;
 				
@@ -58,7 +86,7 @@ public abstract class AbstractPlant {
 		turtleGraphic.addCommand('r', new AngleCommand(Math.toRadians(0)));
 		turtleGraphic.addCommand('-', new RandomTurnCommand(random, -turnAngle, standardDeviation));
 		turtleGraphic.addCommand('+', new RandomTurnCommand(random, turnAngle, standardDeviation));
-		turtleGraphic.addCommand('~', new RandomChangeAngleCommand(random, turnAngle, standardDeviation));
+		turtleGraphic.addCommand('~', new RandomChangeAngleCommand(random, 2 * turnAngle, standardDeviation));
 		turtleGraphic.addCommand('T', new CompositeCommand(
 				new ThicknessFactorCommand(0.9),
 				new LengthFactorCommand(0.95),

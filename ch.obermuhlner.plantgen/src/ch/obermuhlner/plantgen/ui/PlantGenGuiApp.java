@@ -12,11 +12,14 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PlantGenGuiApp extends Application {
@@ -31,6 +34,7 @@ public class PlantGenGuiApp extends Application {
         BorderPane mainBorderPane = new BorderPane();
         root.getChildren().add(mainBorderPane);
 
+        // canvas
         Canvas canvas = new Canvas(1200, 600);
         mainBorderPane.setCenter(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -38,24 +42,46 @@ public class PlantGenGuiApp extends Application {
         BorderPane editBorderPane = new BorderPane();
         mainBorderPane.setTop(editBorderPane);
         
+        // fields
+        GridPane fieldsGridPane = new GridPane();
+        editBorderPane.setLeft(fieldsGridPane);
+        
+        fieldsGridPane.add(new Text("Turn Angle"), 0, 0);
+        Slider turnAngleSlider = new Slider(0, 90, 45);
+		fieldsGridPane.add(turnAngleSlider, 1, 0);
+		
+        fieldsGridPane.add(new Text("Standard Deviation"), 0, 1);
+        Slider standardDeviationSlider = new Slider(0, 0.5, 0);
+		fieldsGridPane.add(standardDeviationSlider, 1, 1);
+		
+        // script
         TextArea scriptTextArea= new TextArea();
         editBorderPane.setCenter(scriptTextArea);
         
+        // buttons
         VBox buttonBox = new VBox();
         editBorderPane.setRight(buttonBox);
         
         Button runButton = new Button("Run");
         buttonBox.getChildren().add(runButton);
         runButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	drawPlant(scriptTextArea.getText(), gc);
+        	drawPlant(scriptTextArea.getText(), turnAngleSlider.getValue(), standardDeviationSlider.getValue(), gc);
         });
 
-        Button randomButton = new Button("Random");
-        buttonBox.getChildren().add(randomButton);
-        randomButton.addEventHandler(ActionEvent.ACTION, event -> {
+        Button randomScriptButton = new Button("Random Script");
+        buttonBox.getChildren().add(randomScriptButton);
+        randomScriptButton.addEventHandler(ActionEvent.ACTION, event -> {
         	runRandomScript(gc, scriptTextArea);
         });
 
+        // value events
+        turnAngleSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+        	drawPlant(scriptTextArea.getText(), turnAngleSlider.getValue(), standardDeviationSlider.getValue(), gc);
+        });
+        standardDeviationSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+        	drawPlant(scriptTextArea.getText(), turnAngleSlider.getValue(), standardDeviationSlider.getValue(), gc);
+        });
+		
         runRandomScript(gc, scriptTextArea);
         
         primaryStage.setScene(new Scene(root));
@@ -64,12 +90,18 @@ public class PlantGenGuiApp extends Application {
 
 	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
 		scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
-		drawPlant(scriptTextArea.getText(), gc);
+
+		Random random = new Random();
+		double turnAngle = random.nextDouble() * 60 + 10;
+		double standardDeviation = random.nextDouble() * 0.0 + 0.1;
+		
+		drawPlant(scriptTextArea.getText(), turnAngle, standardDeviation, gc);
 	}
 
-	private void drawPlant(String script, GraphicsContext gc) {
+	private void drawPlant(String script, double turnAngle, double standardDeviation, GraphicsContext gc) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+		gc.setLineCap(StrokeLineCap.ROUND);
 		
 		TurtleState initialState = new TurtleState();
 		initialState.x = gc.getCanvas().getWidth() / 2;
@@ -84,9 +116,10 @@ public class PlantGenGuiApp extends Application {
 		ScriptPlant plant = new ScriptPlant(random, script);
 		String description = plant.getDescription();
 		
-		gc.setLineCap(StrokeLineCap.ROUND);
-
+		plant.setTurnAngle(Math.toRadians(turnAngle));
+		plant.setStandardDeviation(standardDeviation);
 		plant.initialize(turtleGraphic);
+		
 		turtleGraphic.execute(gc, description);
 	}
 	
