@@ -41,15 +41,31 @@ public abstract class AbstractPlant {
 	public void setStandardDeviation(double standardDeviation) {
 		this.standardDeviation = standardDeviation;
 	}
-	
-	public double getTurnAngle() {
-		return turnAngle;
+
+	public void setInitialThickness(double initialThickness) {
+		this.initialThickness = initialThickness;
 	}
-	
-	public double getStandardDeviation() {
-		return standardDeviation;
+
+	public void setInitialLength(double initialLength) {
+		this.initialLength = initialLength;
 	}
-	
+
+	public void setLengthFactor(double lengthFactor) {
+		this.lengthFactor = lengthFactor;
+	}
+
+	public void setLeafFactor(double leafFactor) {
+		this.leafFactor = leafFactor;
+	}
+
+	public void setLeafThicknessFactor(double leafThicknessFactor) {
+		this.leafThicknessFactor = leafThicknessFactor;
+	}
+
+	public void setSteps(int steps) {
+		this.steps = steps;
+	}
+
 	public void randomize() {
 		turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
 		standardDeviation = random.nextDouble() * 0.0 + 0.1;

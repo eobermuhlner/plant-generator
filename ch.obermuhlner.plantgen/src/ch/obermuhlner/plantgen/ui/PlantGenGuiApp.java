@@ -1,5 +1,6 @@
 package ch.obermuhlner.plantgen.ui;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import ch.obermuhlner.plantgen.ScriptPlant;
@@ -9,6 +10,7 @@ import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -30,7 +32,13 @@ public class PlantGenGuiApp extends Application {
 	private TurtleGraphic turtleGraphic;
 	
 	private DoubleProperty turnAngle = new SimpleDoubleProperty();
-	private DoubleProperty standardDeviation = new SimpleDoubleProperty(0.0);
+	private DoubleProperty standardDeviation = new SimpleDoubleProperty();
+	private DoubleProperty initialThickness = new SimpleDoubleProperty();
+	private DoubleProperty initialLength = new SimpleDoubleProperty();
+	private DoubleProperty lengthFactor = new SimpleDoubleProperty();
+	private DoubleProperty leafFactor = new SimpleDoubleProperty();
+	private DoubleProperty leafThicknessFactor = new SimpleDoubleProperty();
+	private DoubleProperty steps = new SimpleDoubleProperty();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -51,16 +59,17 @@ public class PlantGenGuiApp extends Application {
         // fields
         GridPane fieldsGridPane = new GridPane();
         editBorderPane.setLeft(fieldsGridPane);
+
+        int gridRow = 0;
         
-        fieldsGridPane.add(new Text("Turn Angle"), 0, 0);
-        Slider turnAngleSlider = new Slider(0, 90, 45);
-        Bindings.bindBidirectional(turnAngle, turnAngleSlider.valueProperty());
-		fieldsGridPane.add(turnAngleSlider, 1, 0);
-		
-        fieldsGridPane.add(new Text("Standard Deviation"), 0, 1);
-        Slider standardDeviationSlider = new Slider(0, 0.5, 0);
-        Bindings.bindBidirectional(standardDeviation, standardDeviationSlider.valueProperty());
-		fieldsGridPane.add(standardDeviationSlider, 1, 1);
+        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 90, 45);
+        addSlider(fieldsGridPane, gridRow++, "Standard Deviation", standardDeviation, 0, 0.5, 0);
+        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 20, 15);
+        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25);
+        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.8, 1.2, 1.0);
+        addSlider(fieldsGridPane, gridRow++, "Leaf Factor", leafFactor, 1, 3, 2);
+        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness Factor", leafThicknessFactor, 0, 4, 2);
+        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 3, 10, 7);
 		
         // script
         TextArea scriptTextArea= new TextArea();
@@ -82,18 +91,25 @@ public class PlantGenGuiApp extends Application {
         	runRandomScript(gc, scriptTextArea);
         });
 
-        // value events
-        turnAngleSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-        	drawPlant(scriptTextArea.getText(), gc);
-        });
-        standardDeviationSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-        	drawPlant(scriptTextArea.getText(), gc);
-        });
-		
+        // property listeners
+        for (ObservableValue<?> observableValue : Arrays.asList(turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafFactor, leafThicknessFactor, steps)) {
+        	observableValue.addListener((observable, oldValue, newValue) -> {
+            	drawPlant(scriptTextArea.getText(), gc);
+            });
+        }
+
+        
         runRandomScript(gc, scriptTextArea);
         
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+	}
+	
+	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, double value) {
+        gridPane.add(new Text(label), 0, gridRow);
+        Slider slider = new Slider(min, max, value);
+        Bindings.bindBidirectional(doubleProperty, slider.valueProperty());
+		gridPane.add(slider, 1, gridRow);
 	}
 
 	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
@@ -102,6 +118,12 @@ public class PlantGenGuiApp extends Application {
 		Random random = new Random();
 		turnAngle.set(random.nextDouble() * 60 + 10);
 		standardDeviation.set(random.nextDouble() * 0.0 + 0.1);
+		initialThickness.set(random.nextDouble() * 10 + 10);
+		initialLength.set(random.nextDouble() * 30 + 20);
+		lengthFactor.set(1.0);
+		leafFactor.set(random.nextDouble() * 2.0 + 1.0);
+		leafThicknessFactor.set(random.nextDouble() * 4.0);
+		steps.set(random.nextInt(5) + 5);
 		
 		drawPlant(scriptTextArea.getText(), gc);
 	}
@@ -126,6 +148,13 @@ public class PlantGenGuiApp extends Application {
 		
 		plant.setTurnAngle(Math.toRadians(turnAngle.get()));
 		plant.setStandardDeviation(standardDeviation.get());
+		plant.setInitialLength(initialLength.get());
+		plant.setInitialThickness(initialThickness.get());
+		plant.setLengthFactor(lengthFactor.get());
+		plant.setLeafFactor(leafFactor.get());
+		plant.setLeafThicknessFactor(leafThicknessFactor.get());
+		plant.setSteps((int)steps.get());
+		
 		plant.initialize(turtleGraphic);
 		
 		turtleGraphic.execute(gc, description);
