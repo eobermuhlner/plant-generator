@@ -1,5 +1,6 @@
 package ch.obermuhlner.plantgen.ui;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -62,14 +63,14 @@ public class PlantGenGuiApp extends Application {
 
         int gridRow = 0;
         
-        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 90, 45);
-        addSlider(fieldsGridPane, gridRow++, "Standard Deviation", standardDeviation, 0, 0.5, 0);
-        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 20, 15);
-        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25);
-        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.8, 1.2, 1.0);
-        addSlider(fieldsGridPane, gridRow++, "Leaf Factor", leafFactor, 0, 8, 3);
-        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness Factor", leafThicknessFactor, 0, 4, 2);
-        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 3, 10, 7);
+        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 90, 45, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Randomness", standardDeviation, 0, 0.5, 0, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 40, 20, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, 1.0, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafFactor, 0, 20, 5, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Relative Size", leafThicknessFactor, 0, 4, 2, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 3, 10, 7, "#0");
 		
         // script
         TextArea scriptTextArea= new TextArea();
@@ -105,11 +106,16 @@ public class PlantGenGuiApp extends Application {
         primaryStage.show();
 	}
 	
-	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, double value) {
+	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, double value, String formatPattern) {
         gridPane.add(new Text(label), 0, gridRow);
+        
         Slider slider = new Slider(min, max, value);
         Bindings.bindBidirectional(doubleProperty, slider.valueProperty());
 		gridPane.add(slider, 1, gridRow);
+		
+		Text valueText = new Text();
+		Bindings.bindBidirectional(valueText.textProperty(), doubleProperty, new DecimalFormat(formatPattern));
+		gridPane.add(valueText, 2, gridRow);
 	}
 
 	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
