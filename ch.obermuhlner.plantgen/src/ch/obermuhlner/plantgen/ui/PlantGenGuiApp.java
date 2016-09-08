@@ -11,8 +11,11 @@ import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -31,6 +34,8 @@ import javafx.stage.Stage;
 public class PlantGenGuiApp extends Application {
 
 	private TurtleGraphic turtleGraphic;
+
+	private StringProperty script = new SimpleStringProperty();
 	
 	private DoubleProperty turnAngle = new SimpleDoubleProperty();
 	private DoubleProperty standardDeviation = new SimpleDoubleProperty();
@@ -59,7 +64,10 @@ public class PlantGenGuiApp extends Application {
         
         // fields
         GridPane fieldsGridPane = new GridPane();
+        fieldsGridPane.setHgap(4);
+        fieldsGridPane.setVgap(4);
         editBorderPane.setLeft(fieldsGridPane);
+        BorderPane.setMargin(fieldsGridPane, new Insets(4));
 
         int gridRow = 0;
         
@@ -71,31 +79,42 @@ public class PlantGenGuiApp extends Application {
         addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafFactor, 0, 20, 5, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Relative Size", leafThicknessFactor, 0, 4, 2, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Steps", steps, 3, 10, 7, "#0");
-		
+
+        Button randomizeButton = new Button("Randomize");
+        fieldsGridPane.add(randomizeButton, 1, gridRow++);
+        randomizeButton.addEventHandler(ActionEvent.ACTION, event -> {
+        	randomizeValues();
+        	drawPlant(gc);
+        });
+
         // script
         TextArea scriptTextArea= new TextArea();
         editBorderPane.setCenter(scriptTextArea);
+        BorderPane.setMargin(scriptTextArea, new Insets(4));
+        Bindings.bindBidirectional(script, scriptTextArea.textProperty());
         
         // buttons
         VBox buttonBox = new VBox();
+        buttonBox.setSpacing(4);
         editBorderPane.setRight(buttonBox);
+        BorderPane.setMargin(buttonBox, new Insets(4));
         
-        Button runButton = new Button("Run");
+        Button runButton = new Button("Run Script");
         buttonBox.getChildren().add(runButton);
         runButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	drawPlant(scriptTextArea.getText(), gc);
+        	drawPlant(gc);
         });
 
-        Button randomScriptButton = new Button("Random Script");
-        buttonBox.getChildren().add(randomScriptButton);
-        randomScriptButton.addEventHandler(ActionEvent.ACTION, event -> {
+        Button randomPlantButton = new Button("Random Plant");
+        buttonBox.getChildren().add(randomPlantButton);
+        randomPlantButton.addEventHandler(ActionEvent.ACTION, event -> {
         	runRandomScript(gc, scriptTextArea);
         });
 
         // property listeners
         for (ObservableValue<?> observableValue : Arrays.asList(turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafFactor, leafThicknessFactor, steps)) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
-            	drawPlant(scriptTextArea.getText(), gc);
+            	drawPlant(gc);
             });
         }
 
@@ -121,7 +140,13 @@ public class PlantGenGuiApp extends Application {
 	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
 		scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
 
+		randomizeValues();
+		drawPlant(gc);
+	}
+
+	private void randomizeValues() {
 		Random random = new Random();
+
 		turnAngle.set(random.nextDouble() * 60 + 10);
 		standardDeviation.set(random.nextDouble() * 0.0 + 0.1);
 		initialThickness.set(random.nextDouble() * 10 + 10);
@@ -130,11 +155,9 @@ public class PlantGenGuiApp extends Application {
 		leafFactor.set(random.nextDouble() * 7.0 + 1.0);
 		leafThicknessFactor.set(random.nextDouble() * 4.0);
 		steps.set(random.nextInt(5) + 5);
-		
-		drawPlant(scriptTextArea.getText(), gc);
 	}
 
-	private void drawPlant(String script, GraphicsContext gc) {
+	private void drawPlant(GraphicsContext gc) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setLineCap(StrokeLineCap.ROUND);
@@ -149,7 +172,7 @@ public class PlantGenGuiApp extends Application {
 
 		Random random = new Random();
 		
-		ScriptPlant plant = new ScriptPlant(random, script);
+		ScriptPlant plant = new ScriptPlant(random, script.get());
 		
 		plant.setTurnAngle(Math.toRadians(turnAngle.get()));
 		plant.setStandardDeviation(standardDeviation.get());
