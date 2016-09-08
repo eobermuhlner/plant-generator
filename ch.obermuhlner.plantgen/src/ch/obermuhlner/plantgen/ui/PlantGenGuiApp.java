@@ -58,6 +58,8 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty leafThicknessFactor = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
+	private Group world;
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
         Font sourceFont = Font.font("Consolas");
@@ -79,7 +81,8 @@ public class PlantGenGuiApp extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         // 3D in tab pane
-        Node node3d = createNode3D(scene);
+        world = new Group();
+        Node node3d = createNode3D(world);
         tabPane.getTabs().add(new Tab("3D", node3d));        
         
         // source in tab pane
@@ -155,9 +158,7 @@ public class PlantGenGuiApp extends Application {
         primaryStage.show();
 	}
 	
-	private Node createNode3D(Scene scene) {
-        Group world = new Group();
-
+	private Node createNode3D(Group world) {
         Box box = new Box();
         box.setMaterial(new PhongMaterial(Color.RED));
         world.getChildren().add(box);
@@ -166,7 +167,7 @@ public class PlantGenGuiApp extends Application {
         camera.getTransforms().addAll(
         		new Rotate(-20, Rotate.Y_AXIS),
         		new Rotate(-20, Rotate.X_AXIS),
-        		new Translate(0, 0, -30)
+        		new Translate(0, 0, -50)
         		);
         world.getChildren().add(camera);
 
@@ -174,10 +175,7 @@ public class PlantGenGuiApp extends Application {
         subScene.setFill(Color.BLACK);
         subScene.setCamera(camera);
         
-        Group subSceneGroup = new Group();
-        subSceneGroup.getChildren().add(subScene);
-
-        return subSceneGroup;
+        return subScene;
 	}
 
 	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, double value, String formatPattern) {
