@@ -17,7 +17,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -29,9 +33,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 public class PlantGenGuiApp extends Application {
@@ -56,6 +64,7 @@ public class PlantGenGuiApp extends Application {
 
         primaryStage.setTitle("Random Plant Browser");
         Group root = new Group();
+        Scene scene = new Scene(root);
         
         BorderPane mainBorderPane = new BorderPane();
         root.getChildren().add(mainBorderPane);
@@ -64,20 +73,26 @@ public class PlantGenGuiApp extends Application {
         TabPane tabPane = new TabPane();
         mainBorderPane.setCenter(tabPane);
         
-        // canvas in tab pane
+        // 2D in tab pane
         Canvas canvas = new Canvas(1200, 600);
         tabPane.getTabs().add(new Tab("2D", canvas));
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        // 3D in tab pane
+        Node node3d = createNode3D(scene);
+        tabPane.getTabs().add(new Tab("3D", node3d));        
+        
+        // source in tab pane
         TextArea expandedScriptTextArea = new TextArea();
 		expandedScriptTextArea.setFont(sourceFont);
         tabPane.getTabs().add(new Tab("Source", expandedScriptTextArea));
         Bindings.bindBidirectional(expandedScript, expandedScriptTextArea.textProperty());
         
+        // editor border pane
         BorderPane editBorderPane = new BorderPane();
         mainBorderPane.setTop(editBorderPane);
         
-        // fields
+        // fields in editor border pane
         GridPane fieldsGridPane = new GridPane();
         fieldsGridPane.setHgap(4);
         fieldsGridPane.setVgap(4);
@@ -102,14 +117,14 @@ public class PlantGenGuiApp extends Application {
         	drawPlant(gc);
         });
 
-        // script
+        // script in editor border pane
         TextArea scriptTextArea= new TextArea();
         scriptTextArea.setFont(sourceFont);
         editBorderPane.setCenter(scriptTextArea);
         BorderPane.setMargin(scriptTextArea, new Insets(4));
         Bindings.bindBidirectional(script, scriptTextArea.textProperty());
         
-        // buttons
+        // buttons in editor border pane
         VBox buttonBox = new VBox();
         buttonBox.setSpacing(4);
         editBorderPane.setRight(buttonBox);
@@ -133,14 +148,38 @@ public class PlantGenGuiApp extends Application {
             	drawPlant(gc);
             });
         }
-
         
         runRandomScript(gc, scriptTextArea);
         
-        primaryStage.setScene(new Scene(root));
+		primaryStage.setScene(scene);
         primaryStage.show();
 	}
 	
+	private Node createNode3D(Scene scene) {
+        Group world = new Group();
+
+        Box box = new Box();
+        box.setMaterial(new PhongMaterial(Color.RED));
+        world.getChildren().add(box);
+        
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.getTransforms().addAll(
+        		new Rotate(-20, Rotate.Y_AXIS),
+        		new Rotate(-20, Rotate.X_AXIS),
+        		new Translate(0, 0, -30)
+        		);
+        world.getChildren().add(camera);
+
+        SubScene subScene = new SubScene(world, 800, 600, false, SceneAntialiasing.BALANCED);
+        subScene.setFill(Color.BLACK);
+        subScene.setCamera(camera);
+        
+        Group subSceneGroup = new Group();
+        subSceneGroup.getChildren().add(subScene);
+
+        return subSceneGroup;
+	}
+
 	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, double value, String formatPattern) {
         gridPane.add(new Text(label), 0, gridRow);
         
