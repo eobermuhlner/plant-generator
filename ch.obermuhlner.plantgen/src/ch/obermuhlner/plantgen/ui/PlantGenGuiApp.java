@@ -22,12 +22,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -36,6 +39,7 @@ public class PlantGenGuiApp extends Application {
 	private TurtleGraphic turtleGraphic;
 
 	private StringProperty script = new SimpleStringProperty();
+	private StringProperty expandedScript = new SimpleStringProperty();
 	
 	private DoubleProperty turnAngle = new SimpleDoubleProperty();
 	private DoubleProperty standardDeviation = new SimpleDoubleProperty();
@@ -48,17 +52,28 @@ public class PlantGenGuiApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Random Plant Browser");
+        Font sourceFont = Font.font("Consolas");
+
+        primaryStage.setTitle("Random Plant Browser");
         Group root = new Group();
         
         BorderPane mainBorderPane = new BorderPane();
         root.getChildren().add(mainBorderPane);
 
-        // canvas
+        // tab pane
+        TabPane tabPane = new TabPane();
+        mainBorderPane.setCenter(tabPane);
+        
+        // canvas in tab pane
         Canvas canvas = new Canvas(1200, 600);
-        mainBorderPane.setCenter(canvas);
+        tabPane.getTabs().add(new Tab("2D", canvas));
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        TextArea expandedScriptTextArea = new TextArea();
+		expandedScriptTextArea.setFont(sourceFont);
+        tabPane.getTabs().add(new Tab("Source", expandedScriptTextArea));
+        Bindings.bindBidirectional(expandedScript, expandedScriptTextArea.textProperty());
+        
         BorderPane editBorderPane = new BorderPane();
         mainBorderPane.setTop(editBorderPane);
         
@@ -71,7 +86,7 @@ public class PlantGenGuiApp extends Application {
 
         int gridRow = 0;
         
-        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 90, 45, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 120, 45, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Randomness", standardDeviation, 0, 0.5, 0, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 40, 20, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25, "##0.000");
@@ -89,6 +104,7 @@ public class PlantGenGuiApp extends Application {
 
         // script
         TextArea scriptTextArea= new TextArea();
+        scriptTextArea.setFont(sourceFont);
         editBorderPane.setCenter(scriptTextArea);
         BorderPane.setMargin(scriptTextArea, new Insets(4));
         Bindings.bindBidirectional(script, scriptTextArea.textProperty());
@@ -184,12 +200,25 @@ public class PlantGenGuiApp extends Application {
 		plant.setSteps((int)steps.get());
 
 		String description = plant.getDescription();
+		expandedScript.set(formatSimpleScript(description));
 
 		plant.initialize(turtleGraphic);
 		
 		turtleGraphic.execute(gc, description);
 	}
 	
+	private String formatSimpleScript(String script) {
+		StringBuilder formatted = new StringBuilder();
+		char[] chars = script.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			formatted.append(chars[i]);
+			if (i % 80 == 80 - 1) {
+				formatted.append('\n');
+			}
+		}
+		return formatted.toString();
+	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}
