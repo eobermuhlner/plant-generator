@@ -5,6 +5,7 @@ import java.util.Random;
 
 import ch.obermuhlner.plantgen.ui.turtle.TurtleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
+import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 
 public class RandomForwardCommand implements TurtleCommand {
@@ -22,7 +23,7 @@ public class RandomForwardCommand implements TurtleCommand {
 	}
 	
 	@Override
-	public void execute(GraphicsContext gc, Deque<TurtleState> turtleStates) {
+	public void execute(Deque<TurtleState> turtleStates, GraphicsContext gc, Group world) {
 		TurtleState state = turtleStates.peek();
 		
 		double randomStep = (random.nextGaussian() * standardDeviation + 1.0) * stepFactor * state.length;

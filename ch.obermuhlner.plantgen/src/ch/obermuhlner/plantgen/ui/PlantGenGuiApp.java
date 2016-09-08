@@ -171,6 +171,7 @@ public class PlantGenGuiApp extends Application {
         		);
         world.getChildren().add(camera);
 
+        // TODO hardcoded subscene size for 3D ! 
         SubScene subScene = new SubScene(world, 800, 600, false, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.BLACK);
         subScene.setCamera(camera);
@@ -241,7 +242,7 @@ public class PlantGenGuiApp extends Application {
 
 		plant.initialize(turtleGraphic);
 		
-		turtleGraphic.execute(gc, description);
+		turtleGraphic.execute(description, gc, world);
 	}
 	
 	private String formatSimpleScript(String script) {

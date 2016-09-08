@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 
 public class TurtleGraphic {
@@ -32,7 +33,7 @@ public class TurtleGraphic {
 		this.defaultCommand = defaultCommand;
 	}
 
-	public void execute(GraphicsContext gc, String script) {
+	public void execute(String script, GraphicsContext gc, Group world) {
 		for (int i = 0; i < script.length(); i++) {
 			char c = script.charAt(i);
 			TurtleCommand command = commands.get(c);
@@ -41,13 +42,13 @@ public class TurtleGraphic {
 			}
 			
 			if (command != null) {
-				execute(gc, command);
+				execute(command, gc, world);
 			}
 		}
 	}
 	
-	private void execute(GraphicsContext gc, TurtleCommand command) {
-		command.execute(gc, states);
+	private void execute(TurtleCommand command, GraphicsContext gc, Group world) {
+		command.execute(states, gc, null);
 	}
 	
 	public TurtleState getState() {
