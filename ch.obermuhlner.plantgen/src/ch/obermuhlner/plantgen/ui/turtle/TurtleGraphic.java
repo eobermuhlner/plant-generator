@@ -48,7 +48,7 @@ public class TurtleGraphic {
 	}
 	
 	private void execute(TurtleCommand command, GraphicsContext gc, Group world) {
-		command.execute(states, gc, null);
+		command.execute(states, gc, world);
 	}
 	
 	public TurtleState getState() {

@@ -28,9 +28,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -43,6 +46,8 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 public class PlantGenGuiApp extends Application {
+
+	private static final boolean SHOW_3D = false;
 
 	private TurtleGraphic turtleGraphic;
 
@@ -73,6 +78,7 @@ public class PlantGenGuiApp extends Application {
 
         // tab pane
         TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         mainBorderPane.setCenter(tabPane);
         
         // 2D in tab pane
@@ -81,9 +87,14 @@ public class PlantGenGuiApp extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         // 3D in tab pane
-        world = new Group();
-        Node node3d = createNode3D(world);
-        tabPane.getTabs().add(new Tab("3D", node3d));        
+        if (SHOW_3D) {
+        	StackPane node3dContainer = new StackPane();
+        	node3dContainer.heightProperty();
+        	tabPane.getTabs().add(new Tab("3D", node3dContainer));        
+        	world = new Group();
+        	Node node3d = createNode3D(node3dContainer, world);
+        	node3dContainer.getChildren().add(node3d);
+        }
         
         // source in tab pane
         TextArea expandedScriptTextArea = new TextArea();
@@ -111,7 +122,7 @@ public class PlantGenGuiApp extends Application {
         addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, 1.0, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafFactor, 0, 20, 5, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Relative Size", leafThicknessFactor, 0, 4, 2, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 3, 10, 7, "#0");
+        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, 5, "#0");
 
         Button randomizeButton = new Button("Randomize");
         fieldsGridPane.add(randomizeButton, 1, gridRow++);
@@ -158,23 +169,24 @@ public class PlantGenGuiApp extends Application {
         primaryStage.show();
 	}
 	
-	private Node createNode3D(Group world) {
+	private Node createNode3D(Region container, Group world) {
         Box box = new Box();
-        box.setMaterial(new PhongMaterial(Color.RED));
+        box.setMaterial(new PhongMaterial(Color.YELLOW));
         world.getChildren().add(box);
         
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
         		new Rotate(-20, Rotate.Y_AXIS),
         		new Rotate(-20, Rotate.X_AXIS),
-        		new Translate(0, 0, -50)
+        		new Translate(0, 0, -100)
         		);
         world.getChildren().add(camera);
 
-        // TODO hardcoded subscene size for 3D ! 
         SubScene subScene = new SubScene(world, 800, 600, false, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.BLACK);
         subScene.setCamera(camera);
+        subScene.heightProperty().bind(container.heightProperty());
+        subScene.widthProperty().bind(container.widthProperty());
         
         return subScene;
 	}
@@ -208,7 +220,7 @@ public class PlantGenGuiApp extends Application {
 		lengthFactor.set(1.0);
 		leafFactor.set(random.nextDouble() * 7.0 + 1.0);
 		leafThicknessFactor.set(random.nextDouble() * 4.0);
-		steps.set(random.nextInt(5) + 5);
+		steps.set(random.nextInt(5) + 2);
 	}
 
 	private void drawPlant(GraphicsContext gc) {
@@ -216,9 +228,11 @@ public class PlantGenGuiApp extends Application {
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setLineCap(StrokeLineCap.ROUND);
 		
+		world.getChildren().clear();
+		
 		TurtleState initialState = new TurtleState();
-		initialState.x = gc.getCanvas().getWidth() / 2;
-		initialState.y = gc.getCanvas().getHeight() - 10;
+		initialState.x2d = gc.getCanvas().getWidth() / 2;
+		initialState.y2d = gc.getCanvas().getHeight() - 10;
 		initialState.angle = -Math.PI / 2.0;
 		initialState.thickness = 1.0;
 		initialState.length = 10.0;
@@ -242,7 +256,7 @@ public class PlantGenGuiApp extends Application {
 
 		plant.initialize(turtleGraphic);
 		
-		turtleGraphic.execute(description, gc, world);
+		turtleGraphic.execute(description, gc, SHOW_3D ? world : null);
 	}
 	
 	private String formatSimpleScript(String script) {

@@ -18,7 +18,7 @@ public class CompositeCommand implements TurtleCommand {
 	@Override
 	public void execute(Deque<TurtleState> turtleStates, GraphicsContext gc, Group world) {
 		for (TurtleCommand command : commands) {
-			command.execute(turtleStates, gc, null);
+			command.execute(turtleStates, gc, world);
 		}
 	}	
 

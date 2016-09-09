@@ -27,7 +27,7 @@ public class LeafCommand implements TurtleCommand {
 		double dy = radius * Math.sin(state.angle);
 		
 		gc.setLineWidth(radius);
-		gc.strokeLine(state.x, state.y, state.x+dx, state.y+dy);
+		gc.strokeLine(state.x2d, state.y2d, state.x2d+dx, state.y2d+dy);
 
 	}
 

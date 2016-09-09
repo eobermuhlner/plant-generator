@@ -1,19 +1,16 @@
 package ch.obermuhlner.plantgen.ui.turtle;
 
 public class TurtleState {
-	public double x;
-	public double y;
+	public double x2d;
+	public double y2d;
+	
+	public double x3d;
+	public double y3d;
+	public double z3d;
 
 	public double angle;
 	
 	public double thickness;
 	
 	public double length;
-
-	@Override
-	public String toString() {
-		return "TurtleState [x=" + x + ", y=" + y + ", angle=" + angle + ", thickness=" + thickness + ", length="
-				+ length + "]";
-	}
-	
 }
