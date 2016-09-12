@@ -228,7 +228,9 @@ public class PlantGenGuiApp extends Application {
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setLineCap(StrokeLineCap.ROUND);
 		
-		world.getChildren().clear();
+		if (SHOW_3D) {
+			world.getChildren().clear();
+		}
 		
 		TurtleState initialState = new TurtleState();
 		initialState.x2d = gc.getCanvas().getWidth() / 2;
