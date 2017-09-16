@@ -14,6 +14,8 @@ public class RandomScriptGenerator {
 		"[-LP][+LP][P]",
 		"[P][rTuSP][lTuSP]",
 		"TTTTTP",
+		"T~T~T~T~T~P",
+		"TTTTT[-TTTP][+TTTP]TTTTP",
 		"TTT[-LP]T[+LP]TP",
 	};
 
