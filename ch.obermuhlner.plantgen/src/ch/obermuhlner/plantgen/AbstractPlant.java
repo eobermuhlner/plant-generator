@@ -28,6 +28,7 @@ public abstract class AbstractPlant {
 	private double lengthFactor = 1.0;
 	private double leafFactor = 1.0;
 	private double leafThicknessFactor = 2.0;
+	private double leafLengthFactor = 2.0;
 	private int steps = 5;
 
 	public AbstractPlant(Random random) {
@@ -62,6 +63,10 @@ public abstract class AbstractPlant {
 		this.leafThicknessFactor = leafThicknessFactor;
 	}
 
+	public void setLeafLengthFactor(double leafLengthFactor) {
+		this.leafLengthFactor = leafLengthFactor;
+	}
+
 	public void setSteps(int steps) {
 		this.steps = steps;
 	}
@@ -74,6 +79,7 @@ public abstract class AbstractPlant {
 		lengthFactor = 1.0;
 		leafFactor = random.nextDouble() * 2.0 + 1.0;
 		leafThicknessFactor = random.nextDouble() * 4.0;
+		leafLengthFactor = random.nextDouble() * 10.0 + 1.0;
 		steps = random.nextInt(5) + 5;
 	}
 
@@ -115,7 +121,7 @@ public abstract class AbstractPlant {
 				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
 				new ColorCommand(Color.rgb(0, 255, 0, 0.5)), 
-				new LeafCommand(leafFactor, leafThicknessFactor)));
+				new LeafCommand(leafFactor, leafThicknessFactor, leafLengthFactor)));
 	}
 	
 	public String getDescription() {

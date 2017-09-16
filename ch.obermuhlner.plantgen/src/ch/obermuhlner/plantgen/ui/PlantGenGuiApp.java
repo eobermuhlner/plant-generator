@@ -1,5 +1,9 @@
 package ch.obermuhlner.plantgen.ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Random;
@@ -61,6 +65,7 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty lengthFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafThicknessFactor = new SimpleDoubleProperty();
+	private DoubleProperty leafLengthFactor = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
 	private Group world;
@@ -95,13 +100,20 @@ public class PlantGenGuiApp extends Application {
         	Node node3d = createNode3D(node3dContainer, world);
         	node3dContainer.getChildren().add(node3d);
         }
-        
+
         // source in tab pane
         TextArea expandedScriptTextArea = new TextArea();
 		expandedScriptTextArea.setFont(sourceFont);
+		expandedScriptTextArea.setEditable(false);
         tabPane.getTabs().add(new Tab("Source", expandedScriptTextArea));
         Bindings.bindBidirectional(expandedScript, expandedScriptTextArea.textProperty());
-        
+
+        // help in tab pane
+        TextArea helpTextArea = new TextArea();
+		helpTextArea.setEditable(false);
+		helpTextArea.setText(loadTextResource("readme.txt"));
+        tabPane.getTabs().add(new Tab("Help", helpTextArea));
+
         // editor border pane
         BorderPane editBorderPane = new BorderPane();
         mainBorderPane.setTop(editBorderPane);
@@ -121,7 +133,8 @@ public class PlantGenGuiApp extends Application {
         addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, 1.0, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafFactor, 0, 20, 5, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Relative Size", leafThicknessFactor, 0, 4, 2, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness", leafThicknessFactor, 0, 4, 2, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, 2, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, 5, "#0");
 
         Button randomizeButton = new Button("Randomize");
@@ -157,7 +170,7 @@ public class PlantGenGuiApp extends Application {
         });
 
         // property listeners
-        for (ObservableValue<?> observableValue : Arrays.asList(turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafFactor, leafThicknessFactor, steps)) {
+        for (ObservableValue<?> observableValue : Arrays.asList(turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafFactor, leafThicknessFactor, leafLengthFactor, steps)) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
             });
@@ -169,6 +182,25 @@ public class PlantGenGuiApp extends Application {
         primaryStage.show();
 	}
 	
+	private String loadTextResource(String path) {
+		StringBuilder text = new StringBuilder();
+		
+		InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		try {
+			String line = reader.readLine();
+			while (line != null) {
+				text.append(line);
+				text.append("\n");
+				line = reader.readLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return text.toString();
+	}
+
 	private Node createNode3D(Region container, Group world) {
         Box box = new Box();
         box.setMaterial(new PhongMaterial(Color.YELLOW));
@@ -220,6 +252,7 @@ public class PlantGenGuiApp extends Application {
 		lengthFactor.set(1.0);
 		leafFactor.set(random.nextDouble() * 7.0 + 1.0);
 		leafThicknessFactor.set(random.nextDouble() * 4.0);
+		leafLengthFactor.set(random.nextDouble() * 19.0 + 1.0);
 		steps.set(random.nextInt(5) + 2);
 	}
 
@@ -228,7 +261,9 @@ public class PlantGenGuiApp extends Application {
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setLineCap(StrokeLineCap.ROUND);
 		
-		world.getChildren().clear();
+		if (SHOW_3D) {
+			world.getChildren().clear();
+		}
 		
 		TurtleState initialState = new TurtleState();
 		initialState.x2d = gc.getCanvas().getWidth() / 2;
@@ -249,6 +284,7 @@ public class PlantGenGuiApp extends Application {
 		plant.setLengthFactor(lengthFactor.get());
 		plant.setLeafFactor(leafFactor.get());
 		plant.setLeafThicknessFactor(leafThicknessFactor.get());
+		plant.setLeafLengthFactor(leafLengthFactor.get());
 		plant.setSteps((int)steps.get());
 
 		String description = plant.getDescription();
