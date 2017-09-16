@@ -12,11 +12,13 @@ public class LeafCommand implements TurtleCommand {
 	private double leafFactor;
 	private double leafThicknessFactor;
 	private double leafLengthFactor;
+	private double angle1;
 
-	public LeafCommand(double leafFactor, double leafThicknessFactor, double leafLengthFactor) {
+	public LeafCommand(double leafFactor, double leafThicknessFactor, double leafLengthFactor, double angle1) {
 		this.leafFactor = leafFactor;
 		this.leafThicknessFactor = leafThicknessFactor;
 		this.leafLengthFactor = leafLengthFactor;
+		this.angle1 = angle1;
 	}
 	
 	@Override
@@ -25,11 +27,11 @@ public class LeafCommand implements TurtleCommand {
 
 		double radius = leafFactor + state.thickness * leafThicknessFactor;
 		
-		double dxLeft = radius * 0.5 * Math.cos(state.angle - Math.PI/2);
-		double dyLeft = radius * 0.5 * Math.sin(state.angle - Math.PI/2);
+		double dxLeft = radius * 0.5 * Math.cos(state.angle - angle1);
+		double dyLeft = radius * 0.5 * Math.sin(state.angle - angle1);
 
-		double dxRight = radius * 0.5 * Math.cos(state.angle + Math.PI/2);
-		double dyRight = radius * 0.5 * Math.sin(state.angle + Math.PI/2);
+		double dxRight = radius * 0.5 * Math.cos(state.angle + angle1);
+		double dyRight = radius * 0.5 * Math.sin(state.angle + angle1);
 
 		double dx = radius * leafLengthFactor * Math.cos(state.angle);
 		double dy = radius * leafLengthFactor * Math.sin(state.angle);

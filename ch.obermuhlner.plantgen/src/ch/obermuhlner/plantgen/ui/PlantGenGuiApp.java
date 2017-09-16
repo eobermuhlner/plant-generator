@@ -66,6 +66,7 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty leafFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafThicknessFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafLengthFactor = new SimpleDoubleProperty();
+	private DoubleProperty leafAngle1 = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
 	private Group world;
@@ -135,6 +136,7 @@ public class PlantGenGuiApp extends Application {
         addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafFactor, 0, 20, 5, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Thickness", leafThicknessFactor, 0, 4, 2, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, 2, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Angle1", leafAngle1, 0, 120, 45, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, 5, "#0");
 
         Button randomizeButton = new Button("Randomize");
@@ -170,7 +172,7 @@ public class PlantGenGuiApp extends Application {
         });
 
         // property listeners
-        for (ObservableValue<?> observableValue : Arrays.asList(turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafFactor, leafThicknessFactor, leafLengthFactor, steps)) {
+        for (ObservableValue<?> observableValue : Arrays.asList(turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafFactor, leafThicknessFactor, leafLengthFactor, leafAngle1, steps)) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
             });
@@ -253,6 +255,7 @@ public class PlantGenGuiApp extends Application {
 		leafFactor.set(random.nextDouble() * 7.0 + 1.0);
 		leafThicknessFactor.set(random.nextDouble() * 4.0);
 		leafLengthFactor.set(random.nextDouble() * 19.0 + 1.0);
+		leafAngle1.set(random.nextDouble() * 90);
 		steps.set(random.nextInt(5) + 2);
 	}
 
@@ -285,6 +288,7 @@ public class PlantGenGuiApp extends Application {
 		plant.setLeafFactor(leafFactor.get());
 		plant.setLeafThicknessFactor(leafThicknessFactor.get());
 		plant.setLeafLengthFactor(leafLengthFactor.get());
+		plant.setLeafAngle1(Math.toRadians(leafAngle1.get()));
 		plant.setSteps((int)steps.get());
 
 		String description = plant.getDescription();
