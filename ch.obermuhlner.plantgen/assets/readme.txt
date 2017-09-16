@@ -1,12 +1,12 @@
 The script language consists of simple rules:
 
-start "=" {command}
+start "=" {command} ";"
 
 The rules are executed repeatedly, replacing the start symbol with the commands to the right of the colon.
 
 To make things more interesting stochastic rules are also possible with different probabilities for different variations.
 
-start "=" probability : {command} { "," probability : {command} }
+start "=" probability : {command} { "," probability : {command} } ";"
 
 
 The following commands are available:
