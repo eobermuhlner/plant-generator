@@ -9,35 +9,39 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class LeafCommand implements TurtleCommand {
 
-	private double leafFactor;
+	private double leafSize;
 	private double leafThicknessFactor;
 	private double leafLengthFactor;
-	private double angle1;
+	private double leafWidthFactor;
+	private double widthAngle;
 
-	public LeafCommand(double leafFactor, double leafThicknessFactor, double leafLengthFactor, double angle1) {
-		this.leafFactor = leafFactor;
+	public LeafCommand(double leafSize, double leafThicknessFactor, double leafLengthFactor, double leafWidthFactor, double widthAngle) {
+		this.leafSize = leafSize;
 		this.leafThicknessFactor = leafThicknessFactor;
 		this.leafLengthFactor = leafLengthFactor;
-		this.angle1 = angle1;
+		this.leafWidthFactor = leafWidthFactor;
+		this.widthAngle = widthAngle;
 	}
 	
 	@Override
 	public void execute(Deque<TurtleState> turtleStates, GraphicsContext gc, Group world) {
 		TurtleState state = turtleStates.peek();
 
-		double radius = leafFactor + state.thickness * leafThicknessFactor;
+		double baseLength = leafSize + state.thickness * leafThicknessFactor;
+		double length = baseLength * leafLengthFactor;
+		double width = baseLength * leafWidthFactor;
 		
-		double dxLeft = radius * 0.5 * Math.cos(state.angle - angle1);
-		double dyLeft = radius * 0.5 * Math.sin(state.angle - angle1);
+		double dxLeft = width * Math.cos(state.angle - widthAngle);
+		double dyLeft = width * Math.sin(state.angle - widthAngle);
 
-		double dxRight = radius * 0.5 * Math.cos(state.angle + angle1);
-		double dyRight = radius * 0.5 * Math.sin(state.angle + angle1);
+		double dxRight = width * Math.cos(state.angle + widthAngle);
+		double dyRight = width * Math.sin(state.angle + widthAngle);
 
-		double dx = radius * leafLengthFactor * Math.cos(state.angle);
-		double dy = radius * leafLengthFactor * Math.sin(state.angle);
+		double dxLength = length * Math.cos(state.angle);
+		double dyLength = length * Math.sin(state.angle);
 		
-		double[] xPoints = new double[] { state.x2d, state.x2d + dxLeft, state.x2d + dx, state.x2d + dxRight };
-		double[] yPoints = new double[] { state.y2d, state.y2d + dyLeft, state.y2d + dy, state.y2d + dyRight };
+		double[] xPoints = new double[] { state.x2d, state.x2d + dxLeft, state.x2d + dxLength, state.x2d + dxRight };
+		double[] yPoints = new double[] { state.y2d, state.y2d + dyLeft, state.y2d + dyLength, state.y2d + dyRight };
 
 		gc.setLineWidth(1.0);
 		gc.fillPolygon(xPoints, yPoints, xPoints.length);
