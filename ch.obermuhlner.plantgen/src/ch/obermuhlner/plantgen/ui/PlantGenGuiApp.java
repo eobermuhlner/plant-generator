@@ -15,8 +15,10 @@ import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -31,6 +33,7 @@ import javafx.scene.SubScene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -74,6 +77,10 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty leafWidthAngle = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
+	private ObjectProperty<Color> trunkColor = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> branchColor = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> leafColor = new SimpleObjectProperty<>();
+	
 	private Group world;
 
 	@Override
@@ -133,19 +140,22 @@ public class PlantGenGuiApp extends Application {
 
         int gridRow = 0;
 
-        addTextField(fieldsGridPane, gridRow++, "Random Seed", seed, 0, Long.MAX_VALUE, 1, "##0");
-        addSlider(fieldsGridPane, gridRow++, "Randomness", standardDeviation, 0, 0.5, 0, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 120, 45, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 40, 20, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, 25, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, 1.0, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafSize, 0, 20, 5, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness", leafThicknessFactor, 0, 4, 2, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, 2, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Width", leafWidthFactor, 1, 20, 2, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Width Angle", leafWidthAngle, 0, 120, 45, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, 5, "#0");
-
+        addTextField(fieldsGridPane, gridRow++, "Random Seed", seed, 0, Long.MAX_VALUE, "##0");
+        addSlider(fieldsGridPane, gridRow++, "Randomness", standardDeviation, 0, 0.5, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 120, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 40, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafSize, 0, 20, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness", leafThicknessFactor, 0, 4, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Width", leafWidthFactor, 1, 20, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Leaf Width Angle", leafWidthAngle, 0, 120, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, "#0");
+        addColorPicker(fieldsGridPane, gridRow++, "Trunk Color", trunkColor);
+        addColorPicker(fieldsGridPane, gridRow++, "Branch Color", branchColor);
+        addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
+        
         Button randomizeButton = new Button("Randomize");
         fieldsGridPane.add(randomizeButton, 1, gridRow++);
         randomizeButton.addEventHandler(ActionEvent.ACTION, event -> {
@@ -179,7 +189,7 @@ public class PlantGenGuiApp extends Application {
         });
 
         // property listeners
-        for (ObservableValue<?> observableValue : Arrays.asList(seed, turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle, steps)) {
+        for (ObservableValue<?> observableValue : Arrays.asList(seed, turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle, steps, trunkColor, branchColor, leafColor)) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
             });
@@ -232,18 +242,10 @@ public class PlantGenGuiApp extends Application {
         return subScene;
 	}
 
-	private void addTextField(GridPane gridPane, int gridRow, String label, LongProperty longProperty, double min, double max, double value, String formatPattern) {
+	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, String formatPattern) {
         gridPane.add(new Text(label), 0, gridRow);
         
-        TextField textField = new TextField();
-        Bindings.bindBidirectional(textField.textProperty(), longProperty, new DecimalFormat(formatPattern));
-		gridPane.add(textField, 1, gridRow);
-	}
-	
-	private void addSlider(GridPane gridPane, int gridRow, String label, DoubleProperty doubleProperty, double min, double max, double value, String formatPattern) {
-        gridPane.add(new Text(label), 0, gridRow);
-        
-        Slider slider = new Slider(min, max, value);
+        Slider slider = new Slider(min, max, min);
         Bindings.bindBidirectional(doubleProperty, slider.valueProperty());
 		gridPane.add(slider, 1, gridRow);
 		
@@ -252,6 +254,22 @@ public class PlantGenGuiApp extends Application {
 		gridPane.add(valueText, 2, gridRow);
 	}
 
+	private void addTextField(GridPane gridPane, int gridRow, String label, LongProperty longProperty, double min, double max, String formatPattern) {
+        gridPane.add(new Text(label), 0, gridRow);
+        
+        TextField textField = new TextField();
+        Bindings.bindBidirectional(textField.textProperty(), longProperty, new DecimalFormat(formatPattern));
+		gridPane.add(textField, 1, gridRow);
+	}
+	
+	private void addColorPicker(GridPane gridPane, int gridRow, String label, ObjectProperty<Color> colorProperty) {
+        gridPane.add(new Text(label), 0, gridRow);
+        
+        ColorPicker colorPicker = new ColorPicker();
+        Bindings.bindBidirectional(colorPicker.valueProperty(), colorProperty);
+		gridPane.add(colorPicker, 1, gridRow);
+	}
+	
 	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
 		scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
 
@@ -275,6 +293,10 @@ public class PlantGenGuiApp extends Application {
 		leafWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
 		leafWidthAngle.set(random.nextDouble() * 90);
 		steps.set(random.nextInt(5) + 2);
+		
+		trunkColor.set(Color.hsb(random.nextDouble() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
+		branchColor.set(Color.hsb(random.nextDouble() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
+		leafColor.set(Color.hsb(random.nextDouble() * 20 + 110, random.nextDouble(), random.nextDouble() * 0.6 + 0.4, 0.6));
 	}
 
 	private void drawPlant(GraphicsContext gc) {
@@ -309,6 +331,10 @@ public class PlantGenGuiApp extends Application {
 		plant.setLeafWidthFactor(leafWidthFactor.get());
 		plant.setLeafWidthAngle(Math.toRadians(leafWidthAngle.get()));
 		plant.setSteps((int)steps.get());
+		
+		plant.setTrunkColor(trunkColor.get());
+		plant.setBranchColor(branchColor.get());
+		plant.setLeafColor(leafColor.get());
 
 		String description = plant.getDescription();
 		expandedScript.set(formatSimpleScript(description));

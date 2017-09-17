@@ -33,6 +33,10 @@ public abstract class AbstractPlant {
 	private double leafWidthAngle = Math.PI / 4;
 	private int steps = 5;
 
+	private Color trunkColor = Color.BROWN.darker();
+	private Color branchColor = Color.BROWN;
+	private Color leafColor = Color.rgb(0, 255, 0, 0.5);
+	
 	public AbstractPlant(Random random) {
 		this.random = random;
 	}
@@ -81,6 +85,18 @@ public abstract class AbstractPlant {
 		this.steps = steps;
 	}
 
+	public void setTrunkColor(Color trunkColor) {
+		this.trunkColor = trunkColor;
+	}
+	
+	public void setBranchColor(Color branchColor) {
+		this.branchColor = branchColor;
+	}
+	
+	public void setLeafColor(Color leafColor) {
+		this.leafColor = leafColor;
+	}
+	
 	private String createDescription() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem(random);
 		
@@ -110,15 +126,15 @@ public abstract class AbstractPlant {
 		turtleGraphic.addCommand('T', new CompositeCommand(
 				new ThicknessFactorCommand(0.9),
 				new LengthFactorCommand(0.95),
-				new ColorCommand(Color.BROWN.darker()),
+				new ColorCommand(trunkColor),
 				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('t', new CompositeCommand(
 				new ThicknessFactorCommand(0.5),
 				new LengthFactorCommand(0.9),
-				new ColorCommand(Color.BROWN),
+				new ColorCommand(branchColor),
 				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
-				new ColorCommand(Color.rgb(0, 255, 0, 0.5)), 
+				new ColorCommand(leafColor), 
 				new LeafCommand(leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
 	}
 	
