@@ -291,12 +291,12 @@ public class PlantGenGuiApp extends Application {
 		leafThicknessFactor.set(random.nextDouble() * 4.0);
 		leafLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
 		leafWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
-		leafWidthAngle.set(random.nextDouble() * 90);
+		leafWidthAngle.set(random.nextDouble() * 119 + 1);
 		steps.set(random.nextInt(5) + 2);
 		
-		trunkColor.set(Color.hsb(random.nextDouble() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
-		branchColor.set(Color.hsb(random.nextDouble() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
-		leafColor.set(Color.hsb(random.nextDouble() * 20 + 110, random.nextDouble(), random.nextDouble() * 0.6 + 0.4, 0.6));
+		trunkColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
+		branchColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
+		leafColor.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, 0.6));
 	}
 
 	private void drawPlant(GraphicsContext gc) {
