@@ -284,7 +284,7 @@ public class PlantGenGuiApp extends Application {
 		
 		turnAngle.set(random.nextDouble() * 60 + 10);
 		standardDeviation.set(random.nextDouble() * 0.0 + 0.1);
-		initialThickness.set(random.nextDouble() * 10 + 10);
+		initialThickness.set(random.nextDouble() * 30 + 10);
 		initialLength.set(random.nextDouble() * 30 + 20);
 		lengthFactor.set(1.0);
 		leafSize.set(random.nextDouble() * 7.0 + 1.0);
