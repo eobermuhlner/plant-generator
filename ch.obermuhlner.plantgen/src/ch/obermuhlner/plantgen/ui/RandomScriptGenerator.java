@@ -25,12 +25,14 @@ public class RandomScriptGenerator {
 	private static final String[] P_RULES = {
 		"T[-PL][PL][+PL]",
 		"TT[-P][PL][+P]",
+		"TT[-TTP][+TTP]P",
 		"[-P][+P][-TP][+TP]L",
 		"TT[P][-TPL][+TPL]",
 		"5:PT[-Pt[-L]][+Pt[+L]],1:PT[-Pt[-L]],1:PT[+Pt[+L]]", // cool tree
 		"[P]~PT[-L]~PT[+L]", // vines
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
+		"[PtL]~PT[-ttL]~PT[+ttL]TTP",
 		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
 		"T[lt+tL][rt-tL]P", // upwards turning 
 		"TT[-BL][+BL]P", // christmas tree (gegenstaendig)
@@ -51,6 +53,7 @@ public class RandomScriptGenerator {
 		"T[L]B",
 		"T[-L][+L]B",
 		"T[-L]T[+L]B",
+		"t[-L]t[+L]B",
 		"t[L]B",
 		"t[-L][+L]B",
 		"t[-BL][+BL]B",
