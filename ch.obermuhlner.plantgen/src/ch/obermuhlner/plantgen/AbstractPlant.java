@@ -81,20 +81,6 @@ public abstract class AbstractPlant {
 		this.steps = steps;
 	}
 
-	public void randomize() {
-		turnAngle = Math.toRadians(random.nextDouble() * 60 + 10);
-		standardDeviation = random.nextDouble() * 0.0 + 0.1;
-		initialThickness = random.nextDouble() * 10 + 10;
-		initialLength = random.nextDouble() * 30 + 20;
-		lengthFactor = 1.0;
-		leafSize = random.nextDouble() * 2.0 + 1.0;
-		leafThicknessFactor = random.nextDouble() * 4.0;
-		leafLengthFactor = random.nextDouble() * 10.0 + 1.0;
-		leafWidthFactor = random.nextDouble() * 3.0 + 1.0;
-		leafWidthAngle = random.nextDouble() * Math.PI / 2;
-		steps = random.nextInt(5) + 5;
-	}
-
 	private String createDescription() {
 		LindenmayerSystem lindenmayerSystem = new LindenmayerSystem(random);
 		
