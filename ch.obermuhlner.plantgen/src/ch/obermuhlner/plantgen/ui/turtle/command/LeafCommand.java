@@ -40,11 +40,12 @@ public class LeafCommand implements TurtleCommand {
 		double dxLength = length * Math.cos(state.angle);
 		double dyLength = length * Math.sin(state.angle);
 		
-		double[] xPoints = new double[] { state.x2d, state.x2d + dxLeft, state.x2d + dxLength, state.x2d + dxRight };
-		double[] yPoints = new double[] { state.y2d, state.y2d + dyLeft, state.y2d + dyLength, state.y2d + dyRight };
-
-		gc.setLineWidth(1.0);
-		gc.fillPolygon(xPoints, yPoints, xPoints.length);
+		gc.beginPath();
+		gc.moveTo(state.x2d, state.y2d);
+		gc.bezierCurveTo(state.x2d + dxLeft, state.y2d + dyLeft, state.x2d + dxLeft, state.y2d + dyLeft, state.x2d + dxLength, state.y2d + dyLength);
+		gc.bezierCurveTo(state.x2d + dxRight, state.y2d + dyRight, state.x2d + dxRight, state.y2d + dyRight, state.x2d, state.y2d);
+		gc.closePath();
+		gc.fill();
 	}
 
 }
