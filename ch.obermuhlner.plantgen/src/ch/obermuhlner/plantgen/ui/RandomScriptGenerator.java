@@ -32,11 +32,15 @@ public class RandomScriptGenerator {
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
 		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
+		"T[lt+tL][rt-tL]P", // upwards turning 
 		"TT[-BL][+BL]P", // christmas tree (gegenstaendig)
 		"T[-BL]T[+BL]P", // christmas tree (wechselstaendig)
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
 		"[-TTTPL][TTTPL][+TTTPL]",
-		"T[-tpL]T[+tpL]Pt",
+		"T[-PtL]T[+PtL]Pt",
+		"T[-Pt~t~t~L][+Pt~t~t~L]Pt",
+		"T[-Pt~t~t~t~L]T[+Pt~t~t~t~L]Pt",
+		"T[l+B][r-B]",
 		"[lB][rB]", // horizontal branches
 	};
 
@@ -49,6 +53,7 @@ public class RandomScriptGenerator {
 		"T[-L]T[+L]B",
 		"t[L]B",
 		"t[-L][+L]B",
+		"t[-BL][+BL]B",
 	};
 	
 	/**
