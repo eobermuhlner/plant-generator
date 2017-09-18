@@ -25,7 +25,8 @@ public class RandomScriptGenerator {
 	private static final String[] P_RULES = {
 		"T[-PL][PL][+PL]",
 		"TT[-P][PL][+P]",
-		"TT[-TTP][+TTP]P",
+		"TT[-TTP][+TTP]LP",
+		"TT[-TTP][+TTP][~-tL][~+tL]P",
 		"[-P][+P][-TP][+TP]L",
 		"TT[P][-TPL][+TPL]",
 		"5:PT[-Pt[-L]][+Pt[+L]],1:PT[-Pt[-L]],1:PT[+Pt[+L]]", // cool tree
@@ -34,7 +35,7 @@ public class RandomScriptGenerator {
 		"T[-PT[-L]][+PT[+L]]",
 		"[PtL]~PT[-ttL]~PT[+ttL]TTP",
 		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
-		"T[lt+tL][rt-tL]P", // upwards turning 
+		"T[lt+tLP][rt-tLP]P", // upwards turning 
 		"TT[-BL][+BL]P", // christmas tree (gegenstaendig)
 		"T[-BL]T[+BL]P", // christmas tree (wechselstaendig)
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
@@ -57,6 +58,7 @@ public class RandomScriptGenerator {
 		"t[L]B",
 		"t[-L][+L]B",
 		"t[-BL][+BL]B",
+		"t[ttu~tt~LB]B",
 	};
 	
 	/**
