@@ -30,6 +30,7 @@ public class RandomScriptGenerator {
 		"[-P][+P][-TP][+TP]L",
 		"TT[P][-TPL][+TPL]",
 		"5:PT[-Pt[-L]][+Pt[+L]],1:PT[-Pt[-L]],1:PT[+Pt[+L]]", // cool tree
+		"3:TTT~[-P~ttL]~[+P~ttL],2:TT~[-P~tL]~[+P~tL],1:T~P~tL", // another tree
 		"[P]~PT[-L]~PT[+L]", // vines
 		"P~T[-L]~T[+L]", // single vine
 		"T[-PT[-L]][+PT[+L]]",
