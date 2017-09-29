@@ -7,6 +7,7 @@ import ch.obermuhlner.plantgen.ui.turtle.TurtleGraphic;
 import ch.obermuhlner.plantgen.ui.turtle.command.AngleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.ColorCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.CompositeCommand;
+import ch.obermuhlner.plantgen.ui.turtle.command.FlowerCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.LeafCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.LengthFactorCommand;
 import ch.obermuhlner.plantgen.ui.turtle.command.PopCommand;
@@ -32,10 +33,12 @@ public abstract class AbstractPlant {
 	private double leafWidthFactor = 2.0;
 	private double leafWidthAngle = Math.PI / 4;
 	private int steps = 5;
+	private int petulaCount = 6;
 
 	private Color trunkColor = Color.BROWN.darker();
 	private Color branchColor = Color.BROWN;
 	private Color leafColor = Color.rgb(0, 255, 0, 0.5);
+	private Color petulaColor = Color.rgb(255, 0, 0, 0.5);
 	
 	public AbstractPlant(Random random) {
 		this.random = random;
@@ -81,6 +84,10 @@ public abstract class AbstractPlant {
 		this.leafWidthAngle = leafWidthAngle;
 	}
 	
+	public void setPetulaCount(int petulaCount) {
+		this.petulaCount = petulaCount;
+	}
+	
 	public void setSteps(int steps) {
 		this.steps = steps;
 	}
@@ -95,6 +102,10 @@ public abstract class AbstractPlant {
 	
 	public void setLeafColor(Color leafColor) {
 		this.leafColor = leafColor;
+	}
+	
+	public void setPetulaColor(Color petulaColor) {
+		this.petulaColor = petulaColor;
 	}
 	
 	private String createDescription() {
@@ -136,6 +147,9 @@ public abstract class AbstractPlant {
 		turtleGraphic.addCommand('L', new CompositeCommand(
 				new ColorCommand(leafColor), 
 				new LeafCommand(leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
+		turtleGraphic.addCommand('F', new CompositeCommand(
+				new ColorCommand(petulaColor), 
+				new FlowerCommand(petulaCount, 1, new LeafCommand(leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle))));
 	}
 	
 	public String getDescription() {

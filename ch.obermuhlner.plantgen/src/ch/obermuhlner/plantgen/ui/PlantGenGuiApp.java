@@ -75,11 +75,13 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty leafLengthFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafWidthFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafWidthAngle = new SimpleDoubleProperty();
+	private DoubleProperty petulaCount = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
 	private ObjectProperty<Color> trunkColor = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> branchColor = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> leafColor = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> petulaColor = new SimpleObjectProperty<>();
 	
 	private Group world;
 
@@ -151,10 +153,12 @@ public class PlantGenGuiApp extends Application {
         addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Width", leafWidthFactor, 1, 20, "##0.000");
         addSlider(fieldsGridPane, gridRow++, "Leaf Width Angle", leafWidthAngle, 0, 120, "##0.000");
+        addSlider(fieldsGridPane, gridRow++, "Petula Count", petulaCount, 4, 20, "##0");
         addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, "#0");
         addColorPicker(fieldsGridPane, gridRow++, "Trunk Color", trunkColor);
         addColorPicker(fieldsGridPane, gridRow++, "Branch Color", branchColor);
         addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
+        addColorPicker(fieldsGridPane, gridRow++, "Petula Color", petulaColor);
         
         Button randomizeButton = new Button("Randomize");
         fieldsGridPane.add(randomizeButton, 1, gridRow++);
@@ -189,7 +193,7 @@ public class PlantGenGuiApp extends Application {
         });
 
         // property listeners
-        for (ObservableValue<?> observableValue : Arrays.asList(seed, turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle, steps, trunkColor, branchColor, leafColor)) {
+        for (ObservableValue<?> observableValue : Arrays.asList(seed, turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle, petulaCount, steps, trunkColor, branchColor, leafColor, petulaColor)) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
             });
@@ -292,11 +296,13 @@ public class PlantGenGuiApp extends Application {
 		leafLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
 		leafWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
 		leafWidthAngle.set(random.nextDouble() * 119 + 1);
+		petulaCount.set(random.nextInt(16) + 4);
 		steps.set(random.nextInt(5) + 2);
 		
 		trunkColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		branchColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		leafColor.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, 0.6));
+		petulaColor.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8, 0.6));
 	}
 
 	private void drawPlant(GraphicsContext gc) {
@@ -330,11 +336,13 @@ public class PlantGenGuiApp extends Application {
 		plant.setLeafLengthFactor(leafLengthFactor.get());
 		plant.setLeafWidthFactor(leafWidthFactor.get());
 		plant.setLeafWidthAngle(Math.toRadians(leafWidthAngle.get()));
+		plant.setPetulaCount((int)petulaCount.get());
 		plant.setSteps((int)steps.get());
 		
 		plant.setTrunkColor(trunkColor.get());
 		plant.setBranchColor(branchColor.get());
 		plant.setLeafColor(leafColor.get());
+		plant.setPetulaColor(petulaColor.get());
 
 		String description = plant.getDescription();
 		expandedScript.set(formatSimpleScript(description));
