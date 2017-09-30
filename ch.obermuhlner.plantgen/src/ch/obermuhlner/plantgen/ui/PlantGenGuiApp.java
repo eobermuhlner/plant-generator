@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import ch.obermuhlner.plantgen.ScriptPlant;
@@ -16,6 +17,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -42,6 +44,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -76,6 +79,11 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty leafWidthFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafWidthAngle = new SimpleDoubleProperty();
 	private DoubleProperty petalCount = new SimpleDoubleProperty();
+	private DoubleProperty petalSize = new SimpleDoubleProperty();
+	private DoubleProperty petalThicknessFactor = new SimpleDoubleProperty();
+	private DoubleProperty petalLengthFactor = new SimpleDoubleProperty();
+	private DoubleProperty petalWidthFactor = new SimpleDoubleProperty();
+	private DoubleProperty petalWidthAngle = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
 	private ObjectProperty<Color> trunkColor = new SimpleObjectProperty<>();
@@ -129,44 +137,76 @@ public class PlantGenGuiApp extends Application {
 		helpTextArea.setText(loadTextResource("readme.txt"));
         tabPane.getTabs().add(new Tab("Help", helpTextArea));
 
-        // editor border pane
+        // main border pane
         BorderPane editBorderPane = new BorderPane();
         mainBorderPane.setTop(editBorderPane);
         
-        // fields in editor border pane
-        GridPane fieldsGridPane = new GridPane();
-        fieldsGridPane.setHgap(4);
-        fieldsGridPane.setVgap(4);
-        editBorderPane.setLeft(fieldsGridPane);
-        BorderPane.setMargin(fieldsGridPane, new Insets(4));
-
-        int gridRow = 0;
-
-        addTextField(fieldsGridPane, gridRow++, "Random Seed", seed, 0, Long.MAX_VALUE, "##0");
-        addSlider(fieldsGridPane, gridRow++, "Randomness", standardDeviation, 0, 0.5, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 120, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 40, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafSize, 0, 20, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness", leafThicknessFactor, 0, 4, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Width", leafWidthFactor, 1, 20, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Leaf Width Angle", leafWidthAngle, 0, 120, "##0.000");
-        addSlider(fieldsGridPane, gridRow++, "Petula Count", petalCount, 4, 20, "##0");
-        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, "#0");
-        addColorPicker(fieldsGridPane, gridRow++, "Trunk Color", trunkColor);
-        addColorPicker(fieldsGridPane, gridRow++, "Branch Color", branchColor);
-        addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
-        addColorPicker(fieldsGridPane, gridRow++, "Petula Color", petulaColor);
+        // editor
+        HBox editorBox = new HBox(4);
+        editBorderPane.setLeft(editorBox);
         
-        Button randomizeButton = new Button("Randomize");
-        fieldsGridPane.add(randomizeButton, 1, gridRow++);
-        randomizeButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	randomizeValues();
-        	drawPlant(gc);
-        });
+        // fields in editor border pane
+        {
+	        GridPane fieldsGridPane = createFieldsGridPane();
+	        editorBox.getChildren().add(fieldsGridPane);
+	
+	        int gridRow = 0;
 
+	        Button randomizeButton = new Button("Randomize");
+	        fieldsGridPane.add(randomizeButton, 1, gridRow++);
+	        randomizeButton.addEventHandler(ActionEvent.ACTION, event -> {
+	        	randomizeValues();
+	        	drawPlant(gc);
+	        });
+
+	        addTextField(fieldsGridPane, gridRow++, "Random Seed", seed, 0, Long.MAX_VALUE, "##0");
+	        addSlider(fieldsGridPane, gridRow++, "Steps", steps, 1, 10, "#0");
+        }
+	
+        {
+	        GridPane fieldsGridPane = createFieldsGridPane();
+	        editorBox.getChildren().add(fieldsGridPane);
+	
+	        int gridRow = 0;
+	
+	        addSlider(fieldsGridPane, gridRow++, "Randomness", standardDeviation, 0, 0.5, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Turn Angle", turnAngle, 0, 120, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Initial Thickness", initialThickness, 10, 40, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Initial Length", initialLength, 10, 50, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Length Factor", lengthFactor, 0.5, 2.0, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Size", leafSize, 0, 20, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Thickness", leafThicknessFactor, 0, 4, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Width", leafWidthFactor, 1, 20, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Width Angle", leafWidthAngle, 0, 120, "##0.000");
+        }
+
+        {
+	        GridPane fieldsGridPane = createFieldsGridPane();
+	        editorBox.getChildren().add(fieldsGridPane);
+	
+	        int gridRow = 0;
+	
+	        addSlider(fieldsGridPane, gridRow++, "Petal Count", petalCount, 3, 20, "##0");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Size", petalSize, 0, 20, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Thickness", petalThicknessFactor, 0, 4, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Length", petalLengthFactor, 1, 20, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Width", petalWidthFactor, 1, 20, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Width Angle", petalWidthAngle, 0, 120, "##0.000");
+        }
+	        
+        {
+	        GridPane fieldsGridPane = createFieldsGridPane();
+	        editorBox.getChildren().add(fieldsGridPane);
+	
+	        int gridRow = 0;
+	
+	        addColorPicker(fieldsGridPane, gridRow++, "Trunk Color", trunkColor);
+	        addColorPicker(fieldsGridPane, gridRow++, "Branch Color", branchColor);
+	        addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
+	        addColorPicker(fieldsGridPane, gridRow++, "Petula Color", petulaColor);
+        }
+        
         // script in editor border pane
         TextArea scriptTextArea= new TextArea();
         scriptTextArea.setFont(sourceFont);
@@ -193,7 +233,30 @@ public class PlantGenGuiApp extends Application {
         });
 
         // property listeners
-        for (ObservableValue<?> observableValue : Arrays.asList(seed, turnAngle, standardDeviation, initialThickness, initialLength, lengthFactor, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle, petalCount, steps, trunkColor, branchColor, leafColor, petulaColor)) {
+        List<Property<? extends Object>> properties = Arrays.asList(
+        		seed,
+        		turnAngle,
+        		standardDeviation,
+        		initialThickness,
+        		initialLength,
+        		lengthFactor,
+        		leafSize,
+        		leafThicknessFactor,
+        		leafLengthFactor,
+        		leafWidthFactor,
+        		leafWidthAngle,
+        		petalCount,
+        		petalSize,
+        		petalThicknessFactor,
+        		petalLengthFactor,
+        		petalWidthFactor,
+        		petalWidthAngle,
+        		steps,
+        		trunkColor,
+        		branchColor,
+        		leafColor,
+        		petulaColor);
+		for (ObservableValue<?> observableValue : properties) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
             });
@@ -224,6 +287,14 @@ public class PlantGenGuiApp extends Application {
 		return text.toString();
 	}
 
+	private GridPane createFieldsGridPane() {
+        GridPane fieldsGridPane = new GridPane();
+        fieldsGridPane.setHgap(4);
+        fieldsGridPane.setVgap(4);
+        BorderPane.setMargin(fieldsGridPane, new Insets(4));
+        return fieldsGridPane;
+	}
+	
 	private Node createNode3D(Region container, Group world) {
         Box box = new Box();
         box.setMaterial(new PhongMaterial(Color.YELLOW));
@@ -296,7 +367,12 @@ public class PlantGenGuiApp extends Application {
 		leafLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
 		leafWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
 		leafWidthAngle.set(random.nextDouble() * 119 + 1);
-		petalCount.set(random.nextInt(16) + 4);
+		petalCount.set(random.nextDouble() < 0.8 ? random.nextInt(2) + 4 : random.nextInt(17) + 3);
+		petalSize.set(random.nextDouble() * 2.0 + 1.0);
+		petalThicknessFactor.set(random.nextDouble() * 0.1);
+		petalLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
+		petalWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
+		petalWidthAngle.set(random.nextDouble() * 80 + 10);
 		steps.set(random.nextInt(5) + 2);
 		
 		trunkColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
@@ -331,12 +407,17 @@ public class PlantGenGuiApp extends Application {
 		plant.setInitialLength(initialLength.get());
 		plant.setInitialThickness(initialThickness.get());
 		plant.setLengthFactor(lengthFactor.get());
-		plant.setLeafFactor(leafSize.get());
+		plant.setLeafSize(leafSize.get());
 		plant.setLeafThicknessFactor(leafThicknessFactor.get());
 		plant.setLeafLengthFactor(leafLengthFactor.get());
 		plant.setLeafWidthFactor(leafWidthFactor.get());
 		plant.setLeafWidthAngle(Math.toRadians(leafWidthAngle.get()));
-		plant.setPetulaCount((int)petalCount.get());
+		plant.setPetalCount((int)petalCount.get());
+		plant.setPetalSize(petalSize.get());
+		plant.setPetalThicknessFactor(petalThicknessFactor.get());
+		plant.setPetalLengthFactor(petalLengthFactor.get());
+		plant.setPetalWidthFactor(petalWidthFactor.get());
+		plant.setPetalWidthAngle(Math.toRadians(petalWidthAngle.get()));
 		plant.setSteps((int)steps.get());
 		
 		plant.setTrunkColor(trunkColor.get());

@@ -33,7 +33,12 @@ public abstract class AbstractPlant {
 	private double leafWidthFactor = 2.0;
 	private double leafWidthAngle = Math.PI / 4;
 	private int steps = 5;
-	private int petulaCount = 6;
+	private int petalCount = 6;
+	private double petalSize = 1.0;
+	private double petalThicknessFactor = 2.0;
+	private double petalLengthFactor = 2.0;
+	private double petalWidthFactor = 2.0;
+	private double petalWidthAngle = Math.PI / 4;
 
 	private Color trunkColor = Color.BROWN.darker();
 	private Color branchColor = Color.BROWN;
@@ -64,8 +69,8 @@ public abstract class AbstractPlant {
 		this.lengthFactor = lengthFactor;
 	}
 
-	public void setLeafFactor(double leafFactor) {
-		this.leafSize = leafFactor;
+	public void setLeafSize(double leafSize) {
+		this.leafSize = leafSize;
 	}
 
 	public void setLeafThicknessFactor(double leafThicknessFactor) {
@@ -84,8 +89,28 @@ public abstract class AbstractPlant {
 		this.leafWidthAngle = leafWidthAngle;
 	}
 	
-	public void setPetulaCount(int petulaCount) {
-		this.petulaCount = petulaCount;
+	public void setPetalCount(int petalCount) {
+		this.petalCount = petalCount;
+	}
+	
+	public void setPetalSize(double petalSize) {
+		this.petalSize = petalSize;
+	}
+
+	public void setPetalThicknessFactor(double petalThicknessFactor) {
+		this.petalThicknessFactor = petalThicknessFactor;
+	}
+
+	public void setPetalLengthFactor(double petalLengthFactor) {
+		this.petalLengthFactor = petalLengthFactor;
+	}
+
+	public void setPetalWidthFactor(double petalWidthFactor) {
+		this.petalWidthFactor = petalWidthFactor;
+	}
+
+	public void setPetalWidthAngle(double petalWidthAngle) {
+		this.petalWidthAngle = petalWidthAngle;
 	}
 	
 	public void setSteps(int steps) {
@@ -149,7 +174,7 @@ public abstract class AbstractPlant {
 				new LeafCommand(leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
 		turtleGraphic.addCommand('F', new CompositeCommand(
 				new ColorCommand(petulaColor), 
-				new FlowerCommand(petulaCount, 1, new LeafCommand(leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle))));
+				new FlowerCommand(petalCount, 1, new LeafCommand(petalSize, petalThicknessFactor, petalLengthFactor, petalWidthFactor, petalWidthAngle))));
 	}
 	
 	public String getDescription() {
