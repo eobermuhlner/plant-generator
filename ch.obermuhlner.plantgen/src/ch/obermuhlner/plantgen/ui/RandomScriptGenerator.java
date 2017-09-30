@@ -23,29 +23,29 @@ public class RandomScriptGenerator {
 	 * Point rules
 	 */
 	private static final String[] P_RULES = {
-		"T[-PL][PL][+PL]",
-		"TT[-P][PL][+P]",
-		"TT[-TTP][+TTP]LP",
+		"T[-PL][PL][+PL]f",
+		"TT[-P][PL][+P]f",
+		"TT[-TTP][+TTP]LPf",
 		"TT[-TTP][+TTP][~-tL][~+tL]P",
 		"[-P][+P][-TP][+TP]L",
-		"TT[P][-TPL][+TPL]",
-		"5:PT[-Pt[-L]][+Pt[+L]],1:PT[-Pt[-L]],1:PT[+Pt[+L]]", // cool tree
-		"3:TTT~[-P~ttL]~[+P~ttL],2:TT~[-P~tL]~[+P~tL],1:T~P~tL", // another tree
-		"[P]~PT[-L]~PT[+L]", // vines
-		"P~T[-L]~T[+L]", // single vine
-		"T[-PT[-L]][+PT[+L]]",
-		"[PtL]~PT[-ttL]~PT[+ttL]TTP",
+		"TT[P][-TPL][+TPL]f",
+		"5:PT[-Pt[-L]][+Pt[+L]]f,1:PT[-Pt[-L]],1:PT[+Pt[+L]]", // cool tree
+		"3:TTT~[-P~ttL]~[+P~ttL]f,2:TT~[-P~tL]~[+P~tL],1:T~P~tL", // another tree
+		"[P]~PT[-L]~PT[+L]f", // vines
+		"P~T[-L]~T[+L]f", // single vine
+		"T[-PT[-L]][+PT[+L]]f",
+		"[PtL]~PT[-ttL]~PT[+ttL]TTPf",
 		"T[--Pt[-L][+L]t+t[-L][+L]][++PP[-L][+L]t-t[-L][+L]]", // dense tree
-		"T[lt+tLP][rt-tLP]P", // upwards turning 
-		"TT[-BL][+BL]P", // christmas tree (gegenstaendig)
-		"T[-BL]T[+BL]P", // christmas tree (wechselstaendig)
+		"T[lt+tLPf][rt-tLPf]P", // upwards turning 
+		"TT[-BL][+BL]Pf", // christmas tree (gegenstaendig)
+		"T[-BL]T[+BL]Pf", // christmas tree (wechselstaendig)
 		"[-PTTTL][PTTTtttL][+PTTTL]", // two layer bush
 		"[-TTTPL][TTTPL][+TTTPL]",
 		"T[-PtL]T[+PtL]Pt",
-		"T[-Pt~t~t~L][+Pt~t~t~L]Pt",
-		"T[-Pt~t~t~t~L]T[+Pt~t~t~t~L]Pt",
-		"T[l+B][r-B]",
-		"[lB][rB]", // horizontal branches
+		"T[-Pt~t~t~L][+Pt~t~t~L]Ptf",
+		"T[-Pt~t~t~t~L]T[+Pt~t~t~t~L]Ptf",
+		"T[l+B][r-B]f",
+		"[lB][rB]f", // horizontal branches
 	};
 
 	/**
@@ -70,6 +70,10 @@ public class RandomScriptGenerator {
 		"[-L][+L]",
 	};
 
+	private static final String[] F_RULES = {
+			"1:F,4:",
+		};
+
 	public static String createRandomScript() {
 		StringBuilder script = new StringBuilder();
 		
@@ -84,6 +88,9 @@ public class RandomScriptGenerator {
 		}
 		if (script.toString().contains("N")) {
 			script.append("N=" + RandomUtil.next(random, N_RULES) + ";\n");
+		}
+		if (script.toString().contains("f")) {
+			script.append("f=" + RandomUtil.next(random, F_RULES) + ";\n");
 		}
 		
 		return script.toString();
