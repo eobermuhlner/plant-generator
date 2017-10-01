@@ -89,7 +89,8 @@ public class PlantGenGuiApp extends Application {
 	private ObjectProperty<Color> trunkColor = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> branchColor = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> leafColor = new SimpleObjectProperty<>();
-	private ObjectProperty<Color> petulaColor = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> petal1Color = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> petal2Color = new SimpleObjectProperty<>();
 	
 	private Group world;
 
@@ -204,7 +205,8 @@ public class PlantGenGuiApp extends Application {
 	        addColorPicker(fieldsGridPane, gridRow++, "Trunk Color", trunkColor);
 	        addColorPicker(fieldsGridPane, gridRow++, "Branch Color", branchColor);
 	        addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
-	        addColorPicker(fieldsGridPane, gridRow++, "Petula Color", petulaColor);
+	        addColorPicker(fieldsGridPane, gridRow++, "Petal 1 Color", petal1Color);
+	        addColorPicker(fieldsGridPane, gridRow++, "Petal 2 Color", petal2Color);
         }
         
         // script in editor border pane
@@ -255,7 +257,8 @@ public class PlantGenGuiApp extends Application {
         		trunkColor,
         		branchColor,
         		leafColor,
-        		petulaColor);
+        		petal1Color,
+        		petal2Color);
 		for (ObservableValue<?> observableValue : properties) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
@@ -378,7 +381,8 @@ public class PlantGenGuiApp extends Application {
 		trunkColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		branchColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		leafColor.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, 0.6));
-		petulaColor.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8, 0.6));
+		petal1Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.1 + 0.9));
+		petal2Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.3 + 0.3));
 	}
 
 	private void drawPlant(GraphicsContext gc) {
@@ -423,7 +427,8 @@ public class PlantGenGuiApp extends Application {
 		plant.setTrunkColor(trunkColor.get());
 		plant.setBranchColor(branchColor.get());
 		plant.setLeafColor(leafColor.get());
-		plant.setPetulaColor(petulaColor.get());
+		plant.setPetal1Color(petal1Color.get());
+		plant.setPetal2Color(petal2Color.get());
 
 		String description = plant.getDescription();
 		expandedScript.set(formatSimpleScript(description));

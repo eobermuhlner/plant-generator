@@ -22,14 +22,25 @@ public class LeafCommand implements TurtleCommand {
 		this.leafWidthFactor = leafWidthFactor;
 		this.widthAngle = widthAngle;
 	}
+
+	public double getBaseLength(TurtleState turtleState) {
+		return leafSize + turtleState.thickness * leafThicknessFactor;
+	}
+
+	public double getLeafLength(TurtleState turtleState) {
+		return getBaseLength(turtleState) * leafLengthFactor;
+	}
+	
+	public double getLeafWidth(TurtleState turtleState) {
+		return getBaseLength(turtleState) * leafWidthFactor;
+	}
 	
 	@Override
 	public void execute(Deque<TurtleState> turtleStates, GraphicsContext gc, Group world) {
 		TurtleState state = turtleStates.peek();
 
-		double baseLength = leafSize + state.thickness * leafThicknessFactor;
-		double length = baseLength * leafLengthFactor;
-		double width = baseLength * leafWidthFactor;
+		double length = getLeafLength(state);
+		double width = getLeafWidth(state);
 		
 		double dxLeft = width * Math.cos(state.angle - widthAngle);
 		double dyLeft = width * Math.sin(state.angle - widthAngle);
