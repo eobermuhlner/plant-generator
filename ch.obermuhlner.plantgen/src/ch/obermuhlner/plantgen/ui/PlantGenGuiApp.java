@@ -84,6 +84,7 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty petalLengthFactor = new SimpleDoubleProperty();
 	private DoubleProperty petalWidthFactor = new SimpleDoubleProperty();
 	private DoubleProperty petalWidthAngle = new SimpleDoubleProperty();
+	private DoubleProperty flowerCenterSize = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
 	private ObjectProperty<Color> trunkColor = new SimpleObjectProperty<>();
@@ -91,6 +92,7 @@ public class PlantGenGuiApp extends Application {
 	private ObjectProperty<Color> leafColor = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> petal1Color = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> petal2Color = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> flowerCenterColor = new SimpleObjectProperty<>();
 	
 	private Group world;
 
@@ -194,7 +196,8 @@ public class PlantGenGuiApp extends Application {
 	        addSlider(fieldsGridPane, gridRow++, "Petal Length", petalLengthFactor, 1, 20, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Petal Width", petalWidthFactor, 1, 20, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Petal Width Angle", petalWidthAngle, 0, 120, "##0.000");
-        }
+	        addSlider(fieldsGridPane, gridRow++, "Flower Center Size", flowerCenterSize, 0, 0.5, "##0.000");
+	    }
 	        
         {
 	        GridPane fieldsGridPane = createFieldsGridPane();
@@ -207,7 +210,8 @@ public class PlantGenGuiApp extends Application {
 	        addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
 	        addColorPicker(fieldsGridPane, gridRow++, "Petal 1 Color", petal1Color);
 	        addColorPicker(fieldsGridPane, gridRow++, "Petal 2 Color", petal2Color);
-        }
+	        addColorPicker(fieldsGridPane, gridRow++, "Flower Center Color", flowerCenterColor);
+	    }
         
         // script in editor border pane
         TextArea scriptTextArea= new TextArea();
@@ -253,12 +257,14 @@ public class PlantGenGuiApp extends Application {
         		petalLengthFactor,
         		petalWidthFactor,
         		petalWidthAngle,
+        		flowerCenterSize,
         		steps,
         		trunkColor,
         		branchColor,
         		leafColor,
         		petal1Color,
-        		petal2Color);
+        		petal2Color,
+        		flowerCenterColor);
 		for (ObservableValue<?> observableValue : properties) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
             	drawPlant(gc);
@@ -376,13 +382,15 @@ public class PlantGenGuiApp extends Application {
 		petalLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
 		petalWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
 		petalWidthAngle.set(random.nextDouble() * 80 + 10);
+		flowerCenterSize.set(random.nextDouble() * 0.5);
 		steps.set(random.nextInt(5) + 2);
 		
 		trunkColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		branchColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		leafColor.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, 0.6));
-		petal1Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.1 + 0.9));
-		petal2Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.3 + 0.3));
+		petal1Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.1 + 0.9));
+		petal2Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.3 + 0.3));
+		flowerCenterColor.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8));
 	}
 
 	private void drawPlant(GraphicsContext gc) {
@@ -422,6 +430,7 @@ public class PlantGenGuiApp extends Application {
 		plant.setPetalLengthFactor(petalLengthFactor.get());
 		plant.setPetalWidthFactor(petalWidthFactor.get());
 		plant.setPetalWidthAngle(Math.toRadians(petalWidthAngle.get()));
+		plant.setFlowerCenterSize(flowerCenterSize.get());
 		plant.setSteps((int)steps.get());
 		
 		plant.setTrunkColor(trunkColor.get());
@@ -429,6 +438,7 @@ public class PlantGenGuiApp extends Application {
 		plant.setLeafColor(leafColor.get());
 		plant.setPetal1Color(petal1Color.get());
 		plant.setPetal2Color(petal2Color.get());
+		plant.setFlowerCenterColor(flowerCenterColor.get());
 
 		String description = plant.getDescription();
 		expandedScript.set(formatSimpleScript(description));
