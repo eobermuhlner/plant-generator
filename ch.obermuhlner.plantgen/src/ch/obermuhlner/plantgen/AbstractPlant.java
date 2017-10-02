@@ -43,7 +43,8 @@ public abstract class AbstractPlant {
 
 	private Color trunkColor = Color.BROWN.darker();
 	private Color branchColor = Color.BROWN;
-	private Color leafColor = Color.rgb(0, 255, 0, 0.5);
+	private Color leaf1Color = Color.rgb(0, 255, 0, 0.5);
+	private Color leaf2Color = leaf1Color.darker();
 	private Color petal1Color = Color.rgb(255, 0, 0, 0.9);
 	private Color petal2Color = Color.rgb(0, 0, 255, 0.5);
 	private Color flowerCenterColor = Color.YELLOW;
@@ -132,8 +133,12 @@ public abstract class AbstractPlant {
 		this.branchColor = branchColor;
 	}
 	
-	public void setLeafColor(Color leafColor) {
-		this.leafColor = leafColor;
+	public void setLeaf1Color(Color leaf1Color) {
+		this.leaf1Color = leaf1Color;
+	}
+	
+	public void setLeaf2Color(Color leaf2Color) {
+		this.leaf2Color = leaf2Color;
 	}
 	
 	public void setPetal1Color(Color petal1Color) {
@@ -185,8 +190,8 @@ public abstract class AbstractPlant {
 				new ColorCommand(branchColor),
 				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
-				new ColorCommand(leafColor), 
-				new LeafCommand(leafColor, leafColor.darker(), leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
+				new ColorCommand(leaf1Color), 
+				new LeafCommand(leaf1Color, leaf2Color, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
 		turtleGraphic.addCommand('F', new CompositeCommand(
 				new FlowerCommand(petalCount, new LeafCommand(petal1Color, petal2Color, petalSize, petalThicknessFactor, petalLengthFactor, petalWidthFactor, petalWidthAngle), flowerCenterSize, flowerCenterColor)));
 	}

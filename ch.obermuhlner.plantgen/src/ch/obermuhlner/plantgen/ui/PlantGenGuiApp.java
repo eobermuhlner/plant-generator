@@ -89,7 +89,8 @@ public class PlantGenGuiApp extends Application {
 
 	private ObjectProperty<Color> trunkColor = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> branchColor = new SimpleObjectProperty<>();
-	private ObjectProperty<Color> leafColor = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> leaf1Color = new SimpleObjectProperty<>();
+	private ObjectProperty<Color> leaf2Color = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> petal1Color = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> petal2Color = new SimpleObjectProperty<>();
 	private ObjectProperty<Color> flowerCenterColor = new SimpleObjectProperty<>();
@@ -212,9 +213,10 @@ public class PlantGenGuiApp extends Application {
 	
 	        addColorPicker(fieldsGridPane, gridRow++, "Trunk Color", trunkColor);
 	        addColorPicker(fieldsGridPane, gridRow++, "Branch Color", branchColor);
-	        addColorPicker(fieldsGridPane, gridRow++, "Leaf Color", leafColor);
-	        addColorPicker(fieldsGridPane, gridRow++, "Petal 1 Color", petal1Color);
-	        addColorPicker(fieldsGridPane, gridRow++, "Petal 2 Color", petal2Color);
+	        addColorPicker(fieldsGridPane, gridRow++, "Leaf Center Color", leaf1Color);
+	        addColorPicker(fieldsGridPane, gridRow++, "Leaf Tip Color", leaf1Color);
+	        addColorPicker(fieldsGridPane, gridRow++, "Petal Center Color", petal1Color);
+	        addColorPicker(fieldsGridPane, gridRow++, "Petal Tip Color", petal2Color);
 	        addColorPicker(fieldsGridPane, gridRow++, "Flower Center Color", flowerCenterColor);
 	    }
         
@@ -264,7 +266,8 @@ public class PlantGenGuiApp extends Application {
         		steps,
         		trunkColor,
         		branchColor,
-        		leafColor,
+        		leaf1Color,
+        		leaf2Color,
         		petal1Color,
         		petal2Color,
         		flowerCenterColor);
@@ -390,9 +393,10 @@ public class PlantGenGuiApp extends Application {
 		
 		trunkColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
 		branchColor.set(Color.hsb(random.nextGaussian() * 5 + 5, random.nextDouble(), random.nextDouble() * 0.8 + 0.2));
-		leafColor.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, 0.6));
-		petal1Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.1 + 0.9));
-		petal2Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.3 + 0.3));
+		leaf1Color.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, random.nextDouble() * 0.4 + 0.6));
+		leaf2Color.set(Color.hsb(random.nextGaussian() * 20 + 110, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.6 + 0.4, random.nextDouble() * 0.6 + 0.3));
+		petal1Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.4 + 0.6));
+		petal2Color.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.8 + 0.2, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.6 + 0.3));
 		flowerCenterColor.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8));
 	}
 
@@ -438,7 +442,8 @@ public class PlantGenGuiApp extends Application {
 		
 		plant.setTrunkColor(trunkColor.get());
 		plant.setBranchColor(branchColor.get());
-		plant.setLeafColor(leafColor.get());
+		plant.setLeaf1Color(leaf1Color.get());
+		plant.setLeaf2Color(leaf2Color.get());
 		plant.setPetal1Color(petal1Color.get());
 		plant.setPetal2Color(petal2Color.get());
 		plant.setFlowerCenterColor(flowerCenterColor.get());
