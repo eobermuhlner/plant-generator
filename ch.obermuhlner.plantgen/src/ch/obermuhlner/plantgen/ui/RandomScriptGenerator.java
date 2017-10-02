@@ -72,6 +72,9 @@ public class RandomScriptGenerator {
 
 	private static final String[] F_RULES = {
 			"1:F,4:",
+			"F",
+			"[tF]",
+			"[~tF][~tF][~tF]",
 		};
 
 	public static String createRandomScript() {
