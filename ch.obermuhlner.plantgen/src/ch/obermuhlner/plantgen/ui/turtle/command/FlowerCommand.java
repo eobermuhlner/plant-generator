@@ -7,23 +7,16 @@ import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
 
 public class FlowerCommand implements TurtleCommand {
 
-	private final Color petal1Color;
-	private final Color petal2Color;
 	private final int petalCount;
 	private final LeafCommand petalCommand;
 	private final TurnCommand turnCommand;
 	private final double centerSize;
 	private final Color centerColor;
 
-	public FlowerCommand(Color petal1Color, Color petal2Color, int petalCount, LeafCommand petalCommand, double centerSize, Color centerColor) {
-		this.petal1Color = petal1Color;
-		this.petal2Color = petal2Color;
+	public FlowerCommand(int petalCount, LeafCommand petalCommand, double centerSize, Color centerColor) {
 		this.petalCount = petalCount;
 		this.petalCommand = petalCommand;
 		this.centerSize = centerSize;
@@ -36,10 +29,6 @@ public class FlowerCommand implements TurtleCommand {
 	@Override
 	public void execute(Deque<TurtleState> turtleStates, GraphicsContext gc, Group world) {
 		TurtleState state = turtleStates.peek();
-		
-		double length = petalCommand.getLeafLength(state);
-		RadialGradient radialGradient = new RadialGradient(0, 0, state.x2d, state.y2d, length, false, CycleMethod.NO_CYCLE, new Stop(0.5, petal1Color), new Stop(1.0, petal2Color));
-		gc.setFill(radialGradient);
 		
 		new PushCommand().execute(turtleStates, gc, world);
 		

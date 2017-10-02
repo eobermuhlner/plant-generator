@@ -6,16 +6,24 @@ import ch.obermuhlner.plantgen.ui.turtle.TurtleCommand;
 import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 
 public class LeafCommand implements TurtleCommand {
 
-	private double leafSize;
-	private double leafThicknessFactor;
-	private double leafLengthFactor;
-	private double leafWidthFactor;
-	private double widthAngle;
+	private final Color leaf1Color;
+	private final Color leaf2Color;
+	private final double leafSize;
+	private final double leafThicknessFactor;
+	private final double leafLengthFactor;
+	private final double leafWidthFactor;
+	private final double widthAngle;
 
-	public LeafCommand(double leafSize, double leafThicknessFactor, double leafLengthFactor, double leafWidthFactor, double widthAngle) {
+	public LeafCommand(Color leaf1Color, Color leaf2Color, double leafSize, double leafThicknessFactor, double leafLengthFactor, double leafWidthFactor, double widthAngle) {
+		this.leaf1Color = leaf1Color;
+		this.leaf2Color = leaf2Color;
 		this.leafSize = leafSize;
 		this.leafThicknessFactor = leafThicknessFactor;
 		this.leafLengthFactor = leafLengthFactor;
@@ -50,7 +58,10 @@ public class LeafCommand implements TurtleCommand {
 
 		double dxLength = length * Math.cos(state.angle);
 		double dyLength = length * Math.sin(state.angle);
-		
+
+		RadialGradient radialGradient = new RadialGradient(0, 0, state.x2d, state.y2d, length, false, CycleMethod.NO_CYCLE, new Stop(0.5, leaf1Color), new Stop(1.0, leaf2Color));
+		gc.setFill(radialGradient);
+
 		gc.beginPath();
 		gc.moveTo(state.x2d, state.y2d);
 		gc.bezierCurveTo(state.x2d + dxLeft, state.y2d + dyLeft, state.x2d + dxLeft, state.y2d + dyLeft, state.x2d + dxLength, state.y2d + dyLength);

@@ -186,9 +186,9 @@ public abstract class AbstractPlant {
 				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
 				new ColorCommand(leafColor), 
-				new LeafCommand(leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
+				new LeafCommand(leafColor, leafColor.darker(), leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
 		turtleGraphic.addCommand('F', new CompositeCommand(
-				new FlowerCommand(petal1Color, petal2Color, petalCount, new LeafCommand(petalSize, petalThicknessFactor, petalLengthFactor, petalWidthFactor, petalWidthAngle), flowerCenterSize, flowerCenterColor)));
+				new FlowerCommand(petalCount, new LeafCommand(petal1Color, petal2Color, petalSize, petalThicknessFactor, petalLengthFactor, petalWidthFactor, petalWidthAngle), flowerCenterSize, flowerCenterColor)));
 	}
 	
 	public String getDescription() {
