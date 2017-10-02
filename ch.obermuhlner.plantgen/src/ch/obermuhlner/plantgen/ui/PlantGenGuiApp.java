@@ -81,12 +81,16 @@ public class PlantGenGuiApp extends Application {
 	private DoubleProperty leafLengthFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafWidthFactor = new SimpleDoubleProperty();
 	private DoubleProperty leafWidthAngle = new SimpleDoubleProperty();
+	private DoubleProperty leafColorCenterOffset = new SimpleDoubleProperty();
+	private DoubleProperty leafColor2Offset = new SimpleDoubleProperty();
 	private DoubleProperty petalCount = new SimpleDoubleProperty();
 	private DoubleProperty petalSize = new SimpleDoubleProperty();
 	private DoubleProperty petalThicknessFactor = new SimpleDoubleProperty();
 	private DoubleProperty petalLengthFactor = new SimpleDoubleProperty();
 	private DoubleProperty petalWidthFactor = new SimpleDoubleProperty();
 	private DoubleProperty petalWidthAngle = new SimpleDoubleProperty();
+	private DoubleProperty petalColorCenterOffset = new SimpleDoubleProperty();
+	private DoubleProperty petalColor2Offset = new SimpleDoubleProperty();
 	private DoubleProperty flowerCenterSize = new SimpleDoubleProperty();
 	private DoubleProperty steps = new SimpleDoubleProperty();
 
@@ -201,6 +205,8 @@ public class PlantGenGuiApp extends Application {
 	        addSlider(fieldsGridPane, gridRow++, "Leaf Length", leafLengthFactor, 1, 20, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Leaf Width", leafWidthFactor, 1, 20, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Leaf Width Angle", leafWidthAngle, 0, 120, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Color Center Offset", leafColorCenterOffset, 0, 0.2, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Leaf Color 2 Offset", leafColor2Offset, 0.3, 1.0, "##0.000");
         }
 
         {
@@ -215,6 +221,8 @@ public class PlantGenGuiApp extends Application {
 	        addSlider(fieldsGridPane, gridRow++, "Petal Length", petalLengthFactor, 1, 20, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Petal Width", petalWidthFactor, 1, 20, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Petal Width Angle", petalWidthAngle, 0, 120, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Color Center Offset", petalColorCenterOffset, 0, 0.2, "##0.000");
+	        addSlider(fieldsGridPane, gridRow++, "Petal Color 2 Offset", petalColor2Offset, 0.3, 1.0, "##0.000");
 	        addSlider(fieldsGridPane, gridRow++, "Flower Center Size", flowerCenterSize, 0, 0.5, "##0.000");
 	    }
 	        
@@ -269,12 +277,16 @@ public class PlantGenGuiApp extends Application {
         		leafLengthFactor,
         		leafWidthFactor,
         		leafWidthAngle,
+        		leafColorCenterOffset,
+        		leafColor2Offset,
         		petalCount,
         		petalSize,
         		petalThicknessFactor,
         		petalLengthFactor,
         		petalWidthFactor,
         		petalWidthAngle,
+        		petalColorCenterOffset,
+        		petalColor2Offset,
         		flowerCenterSize,
         		steps,
         		trunkColor,
@@ -395,12 +407,16 @@ public class PlantGenGuiApp extends Application {
 		leafLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
 		leafWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
 		leafWidthAngle.set(random.nextDouble() * 119 + 1);
+		leafColorCenterOffset.set(random.nextDouble() * 0.2 + 0.0);
+		leafColor2Offset.set(random.nextDouble() * 0.7 + 0.3);
 		petalCount.set(random.nextDouble() < 0.8 ? random.nextInt(2) + 4 : random.nextInt(17) + 3);
 		petalSize.set(random.nextDouble() * 2.0 + 1.0);
 		petalThicknessFactor.set(random.nextDouble() * 0.1);
 		petalLengthFactor.set(random.nextDouble() * 10.0 + 1.0);
 		petalWidthFactor.set(random.nextDouble() * 3.0 + 1.0);
 		petalWidthAngle.set(random.nextDouble() * 80 + 10);
+		petalColorCenterOffset.set(random.nextDouble() * 0.2 + 0.0);
+		petalColor2Offset.set(random.nextDouble() * 0.7 + 0.3);
 		flowerCenterSize.set(random.nextDouble() * 0.5);
 		steps.set(random.nextInt(5) + 2);
 		
@@ -450,12 +466,16 @@ public class PlantGenGuiApp extends Application {
 		plant.setLeafLengthFactor(leafLengthFactor.get());
 		plant.setLeafWidthFactor(leafWidthFactor.get());
 		plant.setLeafWidthAngle(Math.toRadians(leafWidthAngle.get()));
+		plant.setLeafColorCenterOffset(leafColorCenterOffset.get());
+		plant.setLeafColor2Offset(leafColor2Offset.get());
 		plant.setPetalCount((int)petalCount.get());
 		plant.setPetalSize(petalSize.get());
 		plant.setPetalThicknessFactor(petalThicknessFactor.get());
 		plant.setPetalLengthFactor(petalLengthFactor.get());
 		plant.setPetalWidthFactor(petalWidthFactor.get());
 		plant.setPetalWidthAngle(Math.toRadians(petalWidthAngle.get()));
+		plant.setPetalColorCenterOffset(petalColorCenterOffset.get());
+		plant.setPetalColor2Offset(petalColor2Offset.get());
 		plant.setFlowerCenterSize(flowerCenterSize.get());
 		plant.setSteps((int)steps.get());
 		
