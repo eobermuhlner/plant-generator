@@ -148,6 +148,8 @@ public class PlantGenGuiApp extends Application {
         HBox editorBox = new HBox(4);
         editBorderPane.setLeft(editorBox);
         
+        Button randomPlantButton;
+        
         // fields in editor border pane
         {
 	        GridPane fieldsGridPane = createFieldsGridPane();
@@ -155,7 +157,10 @@ public class PlantGenGuiApp extends Application {
 	
 	        int gridRow = 0;
 
-	        Button randomizeButton = new Button("Randomize");
+	        randomPlantButton = new Button("Random Plant");
+	        fieldsGridPane.add(randomPlantButton, 1, gridRow++);
+
+	        Button randomizeButton = new Button("Randomize Values");
 	        fieldsGridPane.add(randomizeButton, 1, gridRow++);
 	        randomizeButton.addEventHandler(ActionEvent.ACTION, event -> {
 	        	randomizeValues();
@@ -220,6 +225,10 @@ public class PlantGenGuiApp extends Application {
         BorderPane.setMargin(scriptTextArea, new Insets(4));
         Bindings.bindBidirectional(script, scriptTextArea.textProperty());
         
+        randomPlantButton.addEventHandler(ActionEvent.ACTION, event -> {
+        	runRandomScript(gc, scriptTextArea);
+        });
+
         // buttons in editor border pane
         VBox buttonBox = new VBox();
         buttonBox.setSpacing(4);
@@ -230,12 +239,6 @@ public class PlantGenGuiApp extends Application {
         buttonBox.getChildren().add(runButton);
         runButton.addEventHandler(ActionEvent.ACTION, event -> {
         	drawPlant(gc);
-        });
-
-        Button randomPlantButton = new Button("Random Plant");
-        buttonBox.getChildren().add(randomPlantButton);
-        randomPlantButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	runRandomScript(gc, scriptTextArea);
         });
 
         // property listeners
