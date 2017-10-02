@@ -60,6 +60,9 @@ import javafx.stage.Stage;
 
 public class PlantGenGuiApp extends Application {
 
+	private static final int CANVAS_WIDTH = 1200;
+	private static final int CANVAS_HEIGHT = 600;
+
 	private static final boolean SHOW_3D = false;
 
 	private TurtleGraphic turtleGraphic;
@@ -113,10 +116,20 @@ public class PlantGenGuiApp extends Application {
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         mainBorderPane.setCenter(tabPane);
         
-        // 2D in tab pane
-        Canvas canvas = new Canvas(1200, 600);
-        tabPane.getTabs().add(new Tab("2D", canvas));
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        // Plant 2D in tab pane
+        Canvas plantCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        tabPane.getTabs().add(new Tab("Plant", plantCanvas));
+        GraphicsContext plantGc = plantCanvas.getGraphicsContext2D();
+
+        // Leaf 2D in tab pane
+        Canvas leafCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        tabPane.getTabs().add(new Tab("Leaf", leafCanvas));
+        GraphicsContext leafGc = leafCanvas.getGraphicsContext2D();
+
+        // Flower 2D in tab pane
+        Canvas flowerCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        tabPane.getTabs().add(new Tab("Flower", flowerCanvas));
+        GraphicsContext flowerGc = flowerCanvas.getGraphicsContext2D();
 
         // 3D in tab pane
         if (SHOW_3D) {
@@ -165,7 +178,7 @@ public class PlantGenGuiApp extends Application {
 	        fieldsGridPane.add(randomizeButton, 1, gridRow++);
 	        randomizeButton.addEventHandler(ActionEvent.ACTION, event -> {
 	        	randomizeValues();
-	        	drawPlant(gc);
+	        	drawPlant(plantGc, leafGc, flowerGc);
 	        });
 
 	        addTextField(fieldsGridPane, gridRow++, "Random Seed", seed, 0, Long.MAX_VALUE, "##0");
@@ -228,7 +241,7 @@ public class PlantGenGuiApp extends Application {
         Bindings.bindBidirectional(script, scriptTextArea.textProperty());
         
         randomPlantButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	runRandomScript(gc, scriptTextArea);
+        	runRandomScript(plantGc, leafGc, flowerGc, scriptTextArea);
         });
 
         // buttons in editor border pane
@@ -240,7 +253,7 @@ public class PlantGenGuiApp extends Application {
         Button runButton = new Button("Run Script");
         buttonBox.getChildren().add(runButton);
         runButton.addEventHandler(ActionEvent.ACTION, event -> {
-        	drawPlant(gc);
+        	drawPlant(plantGc, leafGc, flowerGc);
         });
 
         // property listeners
@@ -273,11 +286,11 @@ public class PlantGenGuiApp extends Application {
         		flowerCenterColor);
 		for (ObservableValue<?> observableValue : properties) {
         	observableValue.addListener((observable, oldValue, newValue) -> {
-            	drawPlant(gc);
+            	drawPlant(plantGc, leafGc, flowerGc);
             });
         }
         
-        runRandomScript(gc, scriptTextArea);
+        runRandomScript(plantGc, leafGc, flowerGc, scriptTextArea);
         
 		primaryStage.setScene(scene);
         primaryStage.show();
@@ -360,11 +373,11 @@ public class PlantGenGuiApp extends Application {
 		gridPane.add(colorPicker, 1, gridRow);
 	}
 	
-	private void runRandomScript(GraphicsContext gc, TextArea scriptTextArea) {
+	private void runRandomScript(GraphicsContext plantGc, GraphicsContext leafGc, GraphicsContext flowerGc, TextArea scriptTextArea) {
 		scriptTextArea.setText(RandomScriptGenerator.createRandomScript());
 
 		randomizeValues();
-		drawPlant(gc);
+		drawPlant(plantGc, leafGc, flowerGc);
 	}
 
 	private void randomizeValues() {
@@ -400,7 +413,13 @@ public class PlantGenGuiApp extends Application {
 		flowerCenterColor.set(Color.hsb(random.nextDouble() * 360, random.nextDouble() * 0.2 + 0.8, random.nextDouble() * 0.2 + 0.8));
 	}
 
-	private void drawPlant(GraphicsContext gc) {
+	private void drawPlant(GraphicsContext plantGc, GraphicsContext leafGc, GraphicsContext flowerGc) {
+		drawPlant(script.get(), plantGc);
+		drawPlant("S=TL;", leafGc);
+		drawPlant("S=TTTTTF;", flowerGc);
+	}
+		
+	private void drawPlant(String script, GraphicsContext gc) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setLineCap(StrokeLineCap.ROUND);
@@ -419,7 +438,7 @@ public class PlantGenGuiApp extends Application {
 
 		Random random = new Random(seed.get());
 		
-		ScriptPlant plant = new ScriptPlant(random, script.get());
+		ScriptPlant plant = new ScriptPlant(random, script);
 		
 		plant.setTurnAngle(Math.toRadians(turnAngle.get()));
 		plant.setStandardDeviation(standardDeviation.get());
