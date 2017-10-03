@@ -42,6 +42,6 @@ public class FlowerCommand implements TurtleCommand {
 		double centerRadius = centerSize * petalCommand.getLeafLength(state);
 		gc.setFill(centerColor);
 		double centerOffset = centerRadius / 2;
-		gc.fillOval(state.x2d - centerOffset, state.y2d - centerOffset, centerRadius, centerRadius);
+		gc.fillOval(state.x - centerOffset, state.y - centerOffset, centerRadius, centerRadius);
 	}
 }

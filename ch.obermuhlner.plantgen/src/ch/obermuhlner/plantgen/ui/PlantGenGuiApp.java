@@ -445,8 +445,8 @@ public class PlantGenGuiApp extends Application {
 		}
 		
 		TurtleState initialState = new TurtleState();
-		initialState.x2d = gc.getCanvas().getWidth() / 2;
-		initialState.y2d = gc.getCanvas().getHeight() - 10;
+		initialState.x = gc.getCanvas().getWidth() / 2;
+		initialState.y = gc.getCanvas().getHeight() - 10;
 		initialState.angle = -Math.PI / 2.0;
 		initialState.thickness = 1.0;
 		initialState.length = 10.0;

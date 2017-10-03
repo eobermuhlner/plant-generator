@@ -8,19 +8,25 @@ import ch.obermuhlner.plantgen.ui.turtle.TurtleState;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Box;
 
 public class RandomForwardCommand implements TurtleCommand {
 
-	private Random random;
+	private final Random random;
 	
-	private double stepFactor;
+	private final double stepFactor;
 
-	private double standardDeviation;
+	private final double standardDeviation;
 
-	public RandomForwardCommand(Random random, double stepFactor, double standardDeviation) {
+	private final Color color;
+
+	public RandomForwardCommand(Random random, Color color, double stepFactor, double standardDeviation) {
 		this.random = random;
+		this.color = color;
 		this.stepFactor = stepFactor;
 		this.standardDeviation = standardDeviation;
 	}
@@ -31,34 +37,30 @@ public class RandomForwardCommand implements TurtleCommand {
 		
 		double randomStep = (random.nextGaussian() * standardDeviation + 1.0) * stepFactor * state.length;
 
-		if (gc != null) {
-			double dx = randomStep * Math.cos(state.angle);
-			double dy = randomStep * Math.sin(state.angle);
+		double dx = randomStep * Math.cos(state.angle);
+		double dy = randomStep * Math.sin(state.angle);
 
-			gc.setLineWidth(state.thickness);
-			gc.strokeLine(state.x2d, state.y2d, state.x2d+dx, state.y2d+dy);
+		double x1 = state.x + state.thickness * Math.cos(state.angle - Math.PI / 2);
+		double y1 = state.y + state.thickness * Math.sin(state.angle - Math.PI / 2);
 
-			state.x2d += dx;
-			state.y2d += dy;
-		}
+		double x2 = state.x + dx + state.thickness * Math.cos(state.angle - Math.PI / 2);
+		double y2 = state.y + dy + state.thickness * Math.sin(state.angle - Math.PI / 2);
+
+		double x3 = state.x + dx + state.thickness * Math.cos(state.angle + Math.PI / 2);
+		double y3 = state.y + dy + state.thickness * Math.sin(state.angle + Math.PI / 2);
+
+		double x4 = state.x + state.thickness * Math.cos(state.angle + Math.PI / 2);
+		double y4 = state.y + state.thickness * Math.sin(state.angle + Math.PI / 2);
+
+		LinearGradient gradient = new LinearGradient(x1, y1, x4, y4, false, CycleMethod.NO_CYCLE, new Stop(0, color.brighter()), new Stop(1, color));
+		gc.setFill(gradient);
 		
-		if (world != null) {
-			double factor = 1;
-			
-			double dx = randomStep * factor * Math.cos(state.angle);
-			double dy = randomStep * factor * Math.sin(state.angle);
+		double[] xPoints = new double[] { x1, x2, x3, x4 };
+		double[] yPoints = new double[] { y1, y2, y3, y4 };
+		gc.fillPolygon(xPoints, yPoints, xPoints.length);
 
-	        Box box = new Box(1, 1, randomStep * factor);
-	        box.setMaterial(new PhongMaterial(Color.BROWN));
-	        box.setTranslateX(state.x3d * factor);
-	        box.setTranslateY(state.y3d * factor);
-	        box.setTranslateZ(state.z3d * factor);
-	        world.getChildren().add(box);			
-
-	        state.x3d += dx;
-			state.y3d -= dy;
-		}
-
+		state.x += dx;
+		state.y += dy;
 	}
 
 }

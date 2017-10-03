@@ -24,14 +24,14 @@ public class ForwardCommand implements TurtleCommand {
 		
 		if (gc != null) {
 			gc.setLineWidth(state.thickness);
-			gc.strokeLine(state.x2d, state.y2d, state.x2d+dx, state.y2d+dy);
+			gc.strokeLine(state.x, state.y, state.x+dx, state.y+dy);
 		}
 		
 		if (world != null) {
 		}
 		
-		state.x2d += dx;
-		state.y2d += dy;
+		state.x += dx;
+		state.y += dy;
 	}
 
 }

@@ -14,8 +14,8 @@ public class PushCommand implements TurtleCommand {
 		TurtleState state = turtleStates.peek();
 
 		TurtleState newState = new TurtleState();
-		newState.x2d = state.x2d;
-		newState.y2d = state.y2d;
+		newState.x = state.x;
+		newState.y = state.y;
 		newState.angle = state.angle;
 		newState.thickness = state.thickness;
 		newState.length = state.length;

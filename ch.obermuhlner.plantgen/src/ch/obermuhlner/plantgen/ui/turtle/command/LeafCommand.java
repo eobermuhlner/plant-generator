@@ -67,13 +67,13 @@ public class LeafCommand implements TurtleCommand {
 		double dxColorCenter = colorCenterLength * Math.cos(state.angle);
 		double dyColorCenter = colorCenterLength * Math.sin(state.angle);
 		
-		RadialGradient radialGradient = new RadialGradient(0, 0, state.x2d + dxColorCenter, state.y2d + dyColorCenter, length, false, CycleMethod.NO_CYCLE, new Stop(0.0, leaf1Color), new Stop(color2Offset, leaf2Color));
+		RadialGradient radialGradient = new RadialGradient(0, 0, state.x + dxColorCenter, state.y + dyColorCenter, length, false, CycleMethod.NO_CYCLE, new Stop(0.0, leaf1Color), new Stop(color2Offset, leaf2Color));
 		gc.setFill(radialGradient);
 
 		gc.beginPath();
-		gc.moveTo(state.x2d, state.y2d);
-		gc.bezierCurveTo(state.x2d + dxLeft, state.y2d + dyLeft, state.x2d + dxLeft, state.y2d + dyLeft, state.x2d + dxLength, state.y2d + dyLength);
-		gc.bezierCurveTo(state.x2d + dxRight, state.y2d + dyRight, state.x2d + dxRight, state.y2d + dyRight, state.x2d, state.y2d);
+		gc.moveTo(state.x, state.y);
+		gc.bezierCurveTo(state.x + dxLeft, state.y + dyLeft, state.x + dxLeft, state.y + dyLeft, state.x + dxLength, state.y + dyLength);
+		gc.bezierCurveTo(state.x + dxRight, state.y + dyRight, state.x + dxRight, state.y + dyRight, state.x, state.y);
 		gc.closePath();
 		gc.fill();
 	}

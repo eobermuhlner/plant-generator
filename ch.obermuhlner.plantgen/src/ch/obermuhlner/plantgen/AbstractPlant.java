@@ -202,15 +202,12 @@ public abstract class AbstractPlant {
 		turtleGraphic.addCommand('T', new CompositeCommand(
 				new ThicknessFactorCommand(0.9),
 				new LengthFactorCommand(0.95),
-				new ColorCommand(trunkColor),
-				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
+				new RandomForwardCommand(random, trunkColor, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('t', new CompositeCommand(
 				new ThicknessFactorCommand(0.5),
 				new LengthFactorCommand(0.9),
-				new ColorCommand(branchColor),
-				new RandomForwardCommand(random, lengthFactor, standardDeviation)));
+				new RandomForwardCommand(random, branchColor, lengthFactor, standardDeviation)));
 		turtleGraphic.addCommand('L', new CompositeCommand(
-				new ColorCommand(leaf1Color), 
 				new LeafCommand(leaf1Color, leaf2Color, leafColorCenterOffset, leafColor2Offset, leafSize, leafThicknessFactor, leafLengthFactor, leafWidthFactor, leafWidthAngle)));
 		turtleGraphic.addCommand('F', new CompositeCommand(
 				new FlowerCommand(petalCount, new LeafCommand(petal1Color, petal2Color, petalColorCenterOffset, petalColor2Offset, petalSize, petalThicknessFactor, petalLengthFactor, petalWidthFactor, petalWidthAngle), flowerCenterSize, flowerCenterColor)));
