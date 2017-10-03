@@ -447,9 +447,10 @@ public class PlantGenGuiApp extends Application {
 		TurtleState initialState = new TurtleState();
 		initialState.x = gc.getCanvas().getWidth() / 2;
 		initialState.y = gc.getCanvas().getHeight() - 10;
-		initialState.angle = -Math.PI / 2.0;
+		initialState.angle = -Math.PI / 2;
 		initialState.thickness = 1.0;
 		initialState.length = 10.0;
+		initialState.update();
 		turtleGraphic = new TurtleGraphic(initialState);
 
 		Random random = new Random(seed.get());

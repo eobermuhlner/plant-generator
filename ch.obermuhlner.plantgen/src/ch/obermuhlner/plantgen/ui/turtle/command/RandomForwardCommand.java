@@ -40,8 +40,8 @@ public class RandomForwardCommand implements TurtleCommand {
 		double dx = randomStep * Math.cos(state.angle);
 		double dy = randomStep * Math.sin(state.angle);
 
-		double x1 = state.x + state.thickness * Math.cos(state.angle - Math.PI / 2);
-		double y1 = state.y + state.thickness * Math.sin(state.angle - Math.PI / 2);
+		double x1 = state.xLeft;
+		double y1 = state.yLeft;
 
 		double x2 = state.x + dx + state.thickness * Math.cos(state.angle - Math.PI / 2);
 		double y2 = state.y + dy + state.thickness * Math.sin(state.angle - Math.PI / 2);
@@ -49,8 +49,8 @@ public class RandomForwardCommand implements TurtleCommand {
 		double x3 = state.x + dx + state.thickness * Math.cos(state.angle + Math.PI / 2);
 		double y3 = state.y + dy + state.thickness * Math.sin(state.angle + Math.PI / 2);
 
-		double x4 = state.x + state.thickness * Math.cos(state.angle + Math.PI / 2);
-		double y4 = state.y + state.thickness * Math.sin(state.angle + Math.PI / 2);
+		double x4 = state.xRight;
+		double y4 = state.yRight;
 
 		LinearGradient gradient = new LinearGradient(x1, y1, x4, y4, false, CycleMethod.NO_CYCLE, new Stop(0, color.brighter()), new Stop(1, color));
 		gc.setFill(gradient);
@@ -61,6 +61,12 @@ public class RandomForwardCommand implements TurtleCommand {
 
 		state.x += dx;
 		state.y += dy;
+		
+		state.xLeft = x2;
+		state.yLeft = y2;
+		
+		state.xRight = x3;
+		state.yRight = y3;
 	}
 
 }

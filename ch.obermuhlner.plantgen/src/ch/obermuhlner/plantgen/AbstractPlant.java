@@ -189,6 +189,7 @@ public abstract class AbstractPlant {
 	public void initialize(TurtleGraphic turtleGraphic) {
 		turtleGraphic.getState().thickness = initialThickness;
 		turtleGraphic.getState().length = initialLength;
+		turtleGraphic.getState().update();
 				
 		turtleGraphic.addCommand('[', new PushCommand());
 		turtleGraphic.addCommand(']', new PopCommand());
