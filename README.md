@@ -10,12 +10,47 @@ The implementation uses a stochastic [Lindenmayer System](https://en.wikipedia.o
 
 The following example shows a grammar for a typical plant.
 ```
-S=TTTP;
-P=2:T[-TLP]P,
-	2:T[TLP]P,
-	3:T[-TLP][+TLP]P,
-	1:TP;
+S=TTTTT[-TP][+TP]TTP;
+P=TT[P][-TPL][+TPL]F;
 ```
+
+This script will produce a plant looking similar to this (depending on the randomized values like leaf/flower shape and color):
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/example_script_plant.png)
+
+
+## Script Language
+
+The script language consists of simple rules:
+
+```
+start "=" {command} ";"
+```
+
+The rules are executed repeatedly, replacing the start symbol with the commands to the right of the colon.
+
+To make things more interesting stochastic rules are also possible with different probabilities for different variations.
+
+```
+start "=" probability : {command} { "," probability : {command} } ";"
+```
+
+
+The following commands are available:
+- `S`	The start seed.
+- `[`	Pushes the current state on the stack.
+- `]`	Pops the current state from the stack (essentially restoring the state to what it was at the last [ command).
+- `u`	Sets the growth angle up-wards.
+- `d`	Sets the growth angle down-wards.
+- `l`	Sets the growth angle horizontally left-wards.
+- `r`	Sets the growth angle horizontally right-wards.
+- `-`	Random angle a bit to the left.
+- `+`	Random angle a bit to the right.
+- `~`	Random angle.
+- `T`	Grows a bit of trunk.
+- `t`	Grows a bit of a thinner trunk.
+- `L`	Grows a leaf.
+- `f` Grows a flower.
+
 
 
 ## Screenshots
