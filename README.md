@@ -62,14 +62,59 @@ A GUI application is available to explore the possibilities of this plant genera
 
 ## Screenshots
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant01.png?raw=true)
+```
+S=P;
+P=5:PT[-Pt[-L]][+Pt[+L]]f,1:PT[-Pt[-L]],1:PT[+Pt[+L]];
+f=F;
+```
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant02.png?raw=true)
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant01.png)
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant03.png?raw=true)
+---
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant04.png?raw=true)
+```
+S=TTTTT[-TTTP][+TTTP]TTTTP;
+P=P~T[-L]~T[+L]f;
+f=1:F,4:;
+```
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant05.png?raw=true)
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant02.png)
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant06.png?raw=true)
+---
+
+```
+S=[-LP][+LP][P];
+P=TT[-TTP][+TTP][~-tL][~+tL]P;
+```
+
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant03.png)
+
+---
+
+```
+S=TTTTT[-TTTP][+TTTP]TTTTP;
+P=[PtL]~PT[-ttL]~PT[+ttL]TTPf;
+f=[~tF][~tF][~tF];
+```
+
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant04.png)
+
+---
+
+```
+S=TTT[-LP]T[+LP]TP;
+P=T[-PT[-L]][+PT[+L]]f;
+f=1:F,4:;
+```
+
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant05.png)
+
+---
+
+```
+S=T~T~T~T~T~P;
+P=[PtL]~PT[-ttL]~PT[+ttL]TTPf;
+f=[tF];
+```
+
+![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plant06.png)
