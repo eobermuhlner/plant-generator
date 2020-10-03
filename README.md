@@ -16,7 +16,7 @@ P=TT[P][-TPL][+TPL]F;
 
 This script will produce a plant looking similar to this (depending on the randomized values like leaf/flower shape and color):
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/example_script_plant.png)
+![Example Plant](ch.obermuhlner.plantgen/docu/images/example_script_plant.png)
 
 
 ## Script Language
@@ -57,7 +57,7 @@ The following commands are available:
 
 A GUI application is available to explore the possibilities of this plant generator: 
 
-![Screenshot Plant](ch.obermuhlner.plantgen/docu/images/plan_generator_screenshot.png)
+![Plant Generator Application](ch.obermuhlner.plantgen/docu/images/plant_generator_screenshot.png)
 
 
 ## Screenshots
