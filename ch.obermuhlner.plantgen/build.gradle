@@ -1,0 +1,22 @@
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'ch.obermuhlner'
+version = '0.1-SNAPSHOT'
+archivesBaseName = 'plantgen'
+
+mainClassName = 'ch.obermuhlner.plantgen.ui.PlantGenGuiApp'
+applicationName = 'Plant Generator'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
