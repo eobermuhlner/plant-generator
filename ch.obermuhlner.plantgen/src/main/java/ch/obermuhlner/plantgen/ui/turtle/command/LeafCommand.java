@@ -36,7 +36,7 @@ public class LeafCommand implements TurtleCommand {
 	}
 
 	public double getBaseLength(TurtleState turtleState) {
-		return leafSize + turtleState.thickness * leafThicknessFactor;
+		return Math.max(0, leafSize + turtleState.thickness * leafThicknessFactor);
 	}
 
 	public double getLeafLength(TurtleState turtleState) {
